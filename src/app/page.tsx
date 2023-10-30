@@ -31,7 +31,7 @@ export default async function Home() {
     <main className="bg-white h-screen px-52 py-20">
       <section className="flex h-full">
         <div className="flex flex-col">
-          <SearchBar></SearchBar>
+          <SearchBar courses={courses}></SearchBar>
           <h1 className="font-bold text-black mt-4 text-2xl">
             Upcoming deadlines
           </h1>
