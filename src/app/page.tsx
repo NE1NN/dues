@@ -27,11 +27,11 @@ export async function getCourses() {
 export default async function Home() {
   const courses = await getCourses();
   return (
-    <main className="bg-white h-screen px-24 py-20">
-      <SearchBar></SearchBar>
-      {courses.map((course) => (
-        <div key={course.id}>{course.name}</div>
-      ))}
+    <main className="bg-white h-screen px-52 py-20">
+      <section className="flex h-full">
+        <SearchBar></SearchBar>
+        <aside className="w-[30%] bg-green-500 h-full ml-auto"></aside>
+      </section>
     </main>
   );
 }
