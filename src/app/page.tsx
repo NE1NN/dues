@@ -1,5 +1,8 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
+import { Autocomplete } from '@mui/material';
+import { TextField } from '@mui/material';
+import SearchBar from './components/SearchBar';
 
 type Course = {
   id: string;
@@ -23,8 +26,15 @@ export async function getCourses() {
 
 export default async function Home() {
   const courses = await getCourses();
+
+  const movies = [
+    { label: 'The Godfather', id: 1 },
+    { label: 'Pulp Fiction', id: 2 },
+  ];
+
   return (
-    <main className="flex min-h-screen items-center justify-between p-24">
+    <main className="bg-white h-screen">
+      <SearchBar></SearchBar>
       {courses.map((course) => (
         <div key={course.id}>{course.name}</div>
       ))}
