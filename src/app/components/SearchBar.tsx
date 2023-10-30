@@ -10,7 +10,7 @@ export default function SearchBar() {
       disablePortal
       id="combo-box-demo"
       options={courses}
-      sx={{ width: 300 }}
+      sx={{ width: '40vw' }}
       freeSolo
       renderInput={(params) => (
         <TextField {...params} placeholder="Search Course" />

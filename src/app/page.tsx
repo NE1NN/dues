@@ -26,14 +26,8 @@ export async function getCourses() {
 
 export default async function Home() {
   const courses = await getCourses();
-
-  const movies = [
-    { label: 'The Godfather', id: 1 },
-    { label: 'Pulp Fiction', id: 2 },
-  ];
-
   return (
-    <main className="bg-white h-screen">
+    <main className="bg-white h-screen px-24 py-20">
       <SearchBar></SearchBar>
       {courses.map((course) => (
         <div key={course.id}>{course.name}</div>
