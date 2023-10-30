@@ -3,7 +3,7 @@ import { db } from '../../firebase/service';
 
 type Course = {
   id: string;
-  assignment: string;
+  name: string;
 };
 
 export async function getCourses() {
@@ -26,7 +26,7 @@ export default async function Home() {
   return (
     <main className="flex min-h-screen items-center justify-between p-24">
       {courses.map((course) => (
-        <div key={course.id}>{course.assignment}</div>
+        <div key={course.id}>{course.name}</div>
       ))}
     </main>
   );
