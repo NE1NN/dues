@@ -1,11 +1,11 @@
 'use client';
 
 import { Autocomplete, TextField } from '@mui/material';
-import { Course, SearchBarParams } from '../../../types/types';
+import { Course } from '../../../types/types';
 import { useContext } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 
-export default function SearchBar({ courses }: SearchBarParams) {
+export default function SearchBar() {
   const contextValue = useContext(SelectedCoursesContext);
 
   if (!contextValue) {
@@ -14,7 +14,7 @@ export default function SearchBar({ courses }: SearchBarParams) {
     );
   }
 
-  const { setSelectedCourses } = contextValue;
+  const { courses, setSelectedCourses } = contextValue;
 
   const courseList = courses.map((course) => course.courseCode);
 

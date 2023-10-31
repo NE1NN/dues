@@ -4,14 +4,6 @@ export type Course = {
   courseCode: string;
 };
 
-export type SearchBarParams = {
-  courses: Course[];
-};
-
-export type CourseListParams = {
-  courses: Course[];
-};
-
 export type MainContainerParams = {
   courses: Course[];
 };

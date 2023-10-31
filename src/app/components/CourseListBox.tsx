@@ -5,7 +5,7 @@ import { CourseListParams } from '../../../types/types';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import CourseList from './CourseList';
 
-export default function CourseListBox({ courses }: CourseListParams) {
+export default function CourseListBox() {
   const contextValue = useContext(SelectedCoursesContext);
 
   if (!contextValue) {

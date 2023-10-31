@@ -20,13 +20,13 @@ export default function MainContainer({ courses }: MainContainerParams) {
     >
       <section className="flex h-full">
         <div className="flex flex-col">
-          <SearchBar courses={courses}></SearchBar>
+          <SearchBar></SearchBar>
           <h1 className="font-bold text-black mt-4 text-2xl">
             Upcoming deadlines
           </h1>
           <DueList></DueList>
         </div>
-        <CourseListBox courses={courses}></CourseListBox>
+        <CourseListBox></CourseListBox>
       </section>
     </SelectedCoursesContext.Provider>
   );

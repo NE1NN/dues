@@ -38,16 +38,6 @@ export default async function Home() {
   const courses = await getCourses();
   return (
     <main className="bg-white h-screen px-52 py-20">
-      {/* <section className="flex h-full">
-        <div className="flex flex-col">
-          <SearchBar courses={courses}></SearchBar>
-          <h1 className="font-bold text-black mt-4 text-2xl">
-            Upcoming deadlines
-          </h1>
-          <DueList></DueList>
-        </div>
-        <CourseListBox courses={courses}></CourseListBox>
-      </section> */}
       <MainContainer courses={courses}></MainContainer>
     </main>
   );
