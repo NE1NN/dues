@@ -9,17 +9,14 @@ import CourseListBox from './CourseListBox';
 import DueList from './DueList';
 import SearchBar from './SearchBar';
 import { createContext, useContext, useState } from 'react';
+import SelectedCoursesContext from './SelectedCoursesContext';
 
 export default function MainContainer({ courses }: MainContainerParams) {
-  const SelectedCoursesContext = createContext<
-    SelectedCoursesContextType | undefined
-  >(undefined);
-
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
 
   return (
     <SelectedCoursesContext.Provider
-      value={{ selectedCourses, setSelectedCourses }}
+      value={{ courses, selectedCourses, setSelectedCourses }}
     >
       <section className="flex h-full">
         <div className="flex flex-col">
