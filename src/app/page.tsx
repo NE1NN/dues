@@ -1,14 +1,8 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
-import { Autocomplete } from '@mui/material';
-import { TextField } from '@mui/material';
 import SearchBar from './components/SearchBar';
 import DueList from './components/DueList';
-
-type Course = {
-  id: string;
-  name: string;
-};
+import { Course } from '../../types/types';
 
 export async function getCourses() {
   const coursesCollection = collection(db, 'courses');
@@ -24,6 +18,19 @@ export async function getCourses() {
 
   return courses;
 }
+
+// export async function pushCourses() {
+//   const coursesCol = collection(db, 'courses');
+
+//   data.forEach(async (course) => {
+//     try {
+//       const docRef = await addDoc(coursesCol, course);
+//       console.log('Document written with ID: ', docRef.id);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   });
+// }
 
 export default async function Home() {
   const courses = await getCourses();
