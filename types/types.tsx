@@ -2,6 +2,7 @@ export type Course = {
   id: string;
   name: string;
   courseCode: string;
+  courseName: string;
 };
 
 export type MainContainerParams = {
