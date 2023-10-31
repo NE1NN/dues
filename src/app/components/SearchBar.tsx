@@ -4,7 +4,6 @@ import { Autocomplete, TextField } from '@mui/material';
 import { Course, SearchBarParams } from '../../../types/types';
 
 export default function SearchBar({ courses }: SearchBarParams) {
-  // const courses = ['COMP1511', 'COMP1521', 'COMP1531'];
   const courseList = courses.map((course) => course.name);
 
   return (
