@@ -1,0 +1,36 @@
+'use client';
+
+import {
+  Course,
+  MainContainerParams,
+  SelectedCoursesContextType,
+} from '../../../types/types';
+import CourseListBox from './CourseListBox';
+import DueList from './DueList';
+import SearchBar from './SearchBar';
+import { createContext, useContext, useState } from 'react';
+
+export default function MainContainer({ courses }: MainContainerParams) {
+  const SelectedCoursesContext = createContext<
+    SelectedCoursesContextType | undefined
+  >(undefined);
+
+  const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+
+  return (
+    <SelectedCoursesContext.Provider
+      value={{ selectedCourses, setSelectedCourses }}
+    >
+      <section className="flex h-full">
+        <div className="flex flex-col">
+          <SearchBar courses={courses}></SearchBar>
+          <h1 className="font-bold text-black mt-4 text-2xl">
+            Upcoming deadlines
+          </h1>
+          <DueList></DueList>
+        </div>
+        <CourseListBox courses={courses}></CourseListBox>
+      </section>
+    </SelectedCoursesContext.Provider>
+  );
+}

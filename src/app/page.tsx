@@ -1,12 +1,13 @@
-import { collection, getDocs } from "firebase/firestore";
-import { db } from "../../firebase/service";
-import SearchBar from "./components/SearchBar";
-import DueList from "./components/DueList";
-import { Course } from "../../types/types";
-import CourseListBox from "./components/CourseListBox";
+import { collection, getDocs } from 'firebase/firestore';
+import { db } from '../../firebase/service';
+import SearchBar from './components/SearchBar';
+import DueList from './components/DueList';
+import { Course } from '../../types/types';
+import CourseListBox from './components/CourseListBox';
+import MainContainer from './components/MainContainer';
 
 export async function getCourses() {
-  const coursesCollection = collection(db, "courses");
+  const coursesCollection = collection(db, 'courses');
   const courseDocs = await getDocs(coursesCollection);
 
   const courses: Course[] = courseDocs.docs.map(
@@ -37,7 +38,7 @@ export default async function Home() {
   const courses = await getCourses();
   return (
     <main className="bg-white h-screen px-52 py-20">
-      <section className="flex h-full">
+      {/* <section className="flex h-full">
         <div className="flex flex-col">
           <SearchBar courses={courses}></SearchBar>
           <h1 className="font-bold text-black mt-4 text-2xl">
@@ -46,7 +47,8 @@ export default async function Home() {
           <DueList></DueList>
         </div>
         <CourseListBox courses={courses}></CourseListBox>
-      </section>
+      </section> */}
+      <MainContainer courses={courses}></MainContainer>
     </main>
   );
 }

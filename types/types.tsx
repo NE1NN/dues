@@ -11,3 +11,12 @@ export type SearchBarParams = {
 export type CourseListParams = {
   courses: Course[];
 };
+
+export type MainContainerParams = {
+  courses: Course[];
+};
+
+export type SelectedCoursesContextType = {
+  selectedCourses: Course[];
+  setSelectedCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+};
