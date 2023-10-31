@@ -1,10 +1,8 @@
 import { collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
-
-type Course = {
-  id: string;
-  name: string;
-};
+import SearchBar from './components/SearchBar';
+import DueList from './components/DueList';
+import { Course } from '../../types/types';
 
 export async function getCourses() {
   const coursesCollection = collection(db, 'courses');
@@ -21,13 +19,33 @@ export async function getCourses() {
   return courses;
 }
 
+// export async function pushCourses() {
+//   const coursesCol = collection(db, 'courses');
+
+//   data.forEach(async (course) => {
+//     try {
+//       const docRef = await addDoc(coursesCol, course);
+//       console.log('Document written with ID: ', docRef.id);
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   });
+// }
+
 export default async function Home() {
   const courses = await getCourses();
   return (
-    <main className="flex min-h-screen items-center justify-between p-24">
-      {courses.map((course) => (
-        <div key={course.id}>{course.name}</div>
-      ))}
+    <main className="bg-white h-screen px-52 py-20">
+      <section className="flex h-full">
+        <div className="flex flex-col">
+          <SearchBar courses={courses}></SearchBar>
+          <h1 className="font-bold text-black mt-4 text-2xl">
+            Upcoming deadlines
+          </h1>
+          <DueList></DueList>
+        </div>
+        <aside className="w-[30%] bg-green-500 h-full ml-auto"></aside>
+      </section>
     </main>
   );
 }
