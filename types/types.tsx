@@ -7,3 +7,7 @@ export type Course = {
 export type SearchBarParams = {
   courses: Course[];
 };
+
+export type CourseListParams = {
+  courses: Course[];
+};

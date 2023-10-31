@@ -1,11 +1,12 @@
-import { collection, getDocs } from 'firebase/firestore';
-import { db } from '../../firebase/service';
-import SearchBar from './components/SearchBar';
-import DueList from './components/DueList';
-import { Course } from '../../types/types';
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/service";
+import SearchBar from "./components/SearchBar";
+import DueList from "./components/DueList";
+import { Course } from "../../types/types";
+import CourseListBox from "./components/CourseListBox";
 
 export async function getCourses() {
-  const coursesCollection = collection(db, 'courses');
+  const coursesCollection = collection(db, "courses");
   const courseDocs = await getDocs(coursesCollection);
 
   const courses: Course[] = courseDocs.docs.map(
@@ -44,7 +45,7 @@ export default async function Home() {
           </h1>
           <DueList></DueList>
         </div>
-        <aside className="w-[30%] bg-green-500 h-full ml-auto"></aside>
+        <CourseListBox courses={courses}></CourseListBox>
       </section>
     </main>
   );
