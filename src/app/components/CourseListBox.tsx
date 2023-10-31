@@ -1,7 +1,6 @@
 'use client';
 
 import { useContext } from 'react';
-import { CourseListParams } from '../../../types/types';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import CourseList from './CourseList';
 
@@ -17,7 +16,7 @@ export default function CourseListBox() {
   const { selectedCourses } = contextValue;
 
   return (
-    <aside className="w-[30%] bg-green-500 h-full ml-auto flex flex-col">
+    <aside className="w-[30%] bg-green-500 h-full ml-auto flex flex-col p-8 justify-between gap-8">
       {selectedCourses.map((course) => (
         <CourseList key={course.id} course={course}></CourseList>
       ))}
