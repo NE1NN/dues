@@ -23,7 +23,6 @@ export default function CompletedAssessments({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
             {assessments.length > 0 ? (
               assessments.map((assessment, idx) => (
                 <DueList
@@ -32,9 +31,8 @@ export default function CompletedAssessments({
                 ></DueList>
               ))
             ) : (
-              <p>No assessment completed.</p>
+              <Typography>No assessment completed.</Typography>
             )}
-          </Typography>
         </AccordionDetails>
       </Accordion>
     </div>

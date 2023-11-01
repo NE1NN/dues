@@ -35,7 +35,6 @@ export default function DueAssessments({ assessments }: AssContainerProps) {
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
             {assessments.length > 0 ? (
               assessments.map((assessment, idx) => (
                 <DueList
@@ -44,9 +43,8 @@ export default function DueAssessments({ assessments }: AssContainerProps) {
                 ></DueList>
               ))
             ) : (
-              <p>No assessments due.</p>
+              <Typography>No assessments due.</Typography>
             )}
-          </Typography>
         </AccordionDetails>
       </Accordion>
     </div>

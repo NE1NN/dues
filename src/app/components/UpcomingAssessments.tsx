@@ -23,7 +23,7 @@ export default function UpcomingAssessments({
           </Typography>
         </AccordionSummary>
         <AccordionDetails>
-          <Typography>
+         
             {assessments.length > 0 ? (
               assessments.map((assessment, idx) => (
                 <DueList
@@ -32,9 +32,8 @@ export default function UpcomingAssessments({
                 ></DueList>
               ))
             ) : (
-              <p>No upcoming deadlines.</p>
+              <Typography>No upcoming deadlines.</Typography>
             )}
-          </Typography>
         </AccordionDetails>
       </Accordion>
     </div>
