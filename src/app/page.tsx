@@ -47,8 +47,6 @@ export async function pushCourses() {
   const coursesCol = collection(db, 'courses');
   const converted = convertTimeToISO(data);
 
-  console.log(converted);
-
   await Promise.all(
     converted.map(async (course) => {
       try {

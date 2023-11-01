@@ -38,3 +38,8 @@ export type SelectedCoursesContextType = {
 export type CourseListProps = {
   course: Course;
 };
+
+export type DueListProps = {
+  assessment: AssessmentItem;
+  courseCode: string;
+};

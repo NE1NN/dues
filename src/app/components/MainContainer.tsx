@@ -24,7 +24,16 @@ export default function MainContainer({ courses }: MainContainerParams) {
           <h1 className="font-bold text-black mt-4 text-2xl">
             Upcoming deadlines
           </h1>
-          <DueList></DueList>
+          {/* Maps each assessment */}
+          {selectedCourses.map((course) =>
+            course.assessmentItems.map((assessment, idx) => (
+              <DueList
+                key={`assessment${idx}`}
+                assessment={assessment}
+                courseCode={course.courseCode}
+              ></DueList>
+            ))
+          )}
         </div>
         <CourseListBox></CourseListBox>
       </section>
