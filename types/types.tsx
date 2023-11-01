@@ -65,3 +65,12 @@ export type DueListProps = {
 export type AssContainerProps = {
   assessments: Assessment[];
 };
+
+export type SearchBarProps = {
+  isLocked: boolean;
+};
+
+export type CourseListBoxProps = {
+  isLocked: boolean;
+  setIsLocked: React.Dispatch<React.SetStateAction<boolean>>;
+};

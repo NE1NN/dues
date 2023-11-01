@@ -22,6 +22,7 @@ export default function MainContainer({
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
   const [clickedCourse, setClickedCourse] = useState('');
+  const [isLocked, setIsLocked] = useState(false);
 
   function getSelectedAssessments(
     assessments: Assessment[],
@@ -105,14 +106,17 @@ export default function MainContainer({
     >
       <section className="flex h-full" onClick={() => setClickedCourse('')}>
         <div className="flex flex-col">
-          <SearchBar></SearchBar>
+          <SearchBar isLocked={isLocked}></SearchBar>
           <CompletedAssessments
             assessments={completedAss}
           ></CompletedAssessments>
           <DueAssessments assessments={dueAss}></DueAssessments>
           <UpcomingAssessments assessments={upcomingAss}></UpcomingAssessments>
         </div>
-        <CourseListBox></CourseListBox>
+        <CourseListBox
+          setIsLocked={setIsLocked}
+          isLocked={isLocked}
+        ></CourseListBox>
       </section>
     </SelectedCoursesContext.Provider>
   );

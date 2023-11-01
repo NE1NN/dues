@@ -1,11 +1,11 @@
 'use client';
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
-import { Course } from '../../../types/types';
+import { Course, SearchBarProps } from '../../../types/types';
 import { useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 
-export default function SearchBar() {
+export default function SearchBar({ isLocked }: SearchBarProps) {
   const contextValue = useContext(SelectedCoursesContext);
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>([]);
 
@@ -41,7 +41,12 @@ export default function SearchBar() {
       }}
       renderTags={(tagValue, getTagProps) => {
         return tagValue.map((option, index) => (
-          <Chip {...getTagProps({ index })} key={option} label={option} />
+          <Chip
+            {...getTagProps({ index })}
+            key={option}
+            label={option}
+            disabled={isLocked}
+          />
         ));
       }}
       /////////////////////////////////////////////////////////////////
