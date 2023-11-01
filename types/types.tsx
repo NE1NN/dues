@@ -48,6 +48,8 @@ export type SelectedCoursesContextType = {
   courses: Course[];
   selectedCourses: Course[];
   setSelectedCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+  mutableAssessments: Assessment[];
+  setMutableAssesments: React.Dispatch<React.SetStateAction<Assessment[]>>;
 };
 
 export type CourseListProps = {

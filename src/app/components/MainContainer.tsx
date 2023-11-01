@@ -20,6 +20,7 @@ export default function MainContainer({
   assessments,
 }: MainContainerProps) {
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+  const [mutableAssessments, setMutableAssesments] = useState(assessments);
 
   function getSelectedAssessments(
     assessments: Assessment[],
@@ -41,7 +42,9 @@ export default function MainContainer({
     today.setHours(0, 0, 0, 0);
 
     const filteredAss = assessments.filter(
-      (assessment) => new Date(assessment.dueDate) >= today
+      (assessment) =>
+        new Date(assessment.dueDate) >= today &&
+        assessment.status !== 'completed'
     );
 
     return filteredAss.sort(
@@ -55,7 +58,9 @@ export default function MainContainer({
     today.setHours(0, 0, 0, 0);
 
     const filteredAss = assessments.filter(
-      (assessment) => new Date(assessment.dueDate) < today
+      (assessment) =>
+        new Date(assessment.dueDate) < today &&
+        assessment.status !== 'completed'
     );
 
     return filteredAss.sort(
@@ -72,7 +77,7 @@ export default function MainContainer({
   }
 
   const selectedCoursesAss = getSelectedAssessments(
-    assessments,
+    mutableAssessments,
     selectedCourses
   );
   const upcomingAss = getUpcomingAssessments(selectedCoursesAss);
@@ -81,7 +86,13 @@ export default function MainContainer({
 
   return (
     <SelectedCoursesContext.Provider
-      value={{ courses, selectedCourses, setSelectedCourses }}
+      value={{
+        courses,
+        selectedCourses,
+        setSelectedCourses,
+        mutableAssessments,
+        setMutableAssesments,
+      }}
     >
       <section className="flex h-full">
         <div className="flex flex-col">

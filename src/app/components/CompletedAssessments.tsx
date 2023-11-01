@@ -8,7 +8,10 @@ export default function CompletedAssessments({
     <div>
       <h1 className="font-bold text-black mt-4 text-2xl">Completed</h1>
       {assessments.map((assessment, idx) => (
-        <DueList key={idx} assessment={assessment}></DueList>
+        <DueList
+          key={`${assessment.id}${idx}`}
+          assessment={assessment}
+        ></DueList>
       ))}
     </div>
   );
