@@ -21,17 +21,24 @@ export default function MainContainer({
 }: MainContainerProps) {
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
+  const [clickedCourse, setClickedCourse] = useState('');
 
   function getSelectedAssessments(
     assessments: Assessment[],
     selectedCourses: Course[]
   ): Assessment[] {
     // Filters the assessments based on selected courses
-    const filteredAssessments = assessments.filter((assessment) =>
+    let filteredAssessments = assessments.filter((assessment) =>
       selectedCourses.some(
         (course) => course.courseCode === assessment.courseCode
       )
     );
+
+    if (clickedCourse !== '') {
+      filteredAssessments = filteredAssessments.filter(
+        (assessment) => assessment.courseCode === clickedCourse
+      );
+    }
 
     return filteredAssessments;
   }
@@ -92,9 +99,11 @@ export default function MainContainer({
         setSelectedCourses,
         mutableAssessments,
         setMutableAssesments,
+        clickedCourse,
+        setClickedCourse,
       }}
     >
-      <section className="flex h-full">
+      <section className="flex h-full" onClick={() => setClickedCourse('')}>
         <div className="flex flex-col">
           <SearchBar></SearchBar>
           <CompletedAssessments

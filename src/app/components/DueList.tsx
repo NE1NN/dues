@@ -18,6 +18,7 @@ export default function DueList({ assessment }: DueListProps) {
   const { setMutableAssesments } = contextValue;
 
   function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+    event.stopPropagation();
     setMutableAssesments((prev) =>
       prev.map((ass) =>
         ass.id === assessment.id
