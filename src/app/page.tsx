@@ -13,7 +13,13 @@ import MainContainer from './components/MainContainer';
 import { assessments, data } from '../../firebase/data';
 import { DateTime } from 'luxon';
 
+import { PdfReader } from './pdfReader';
+
 export async function getCourses() {
+	const parsedData = PdfReader();
+	console.log('===============getCourses===============');
+	console.log(parsedData);
+
 	const coursesCollection = collection(db, 'courses');
 	const courseDocs = await getDocs(coursesCollection);
 
