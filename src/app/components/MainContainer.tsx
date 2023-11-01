@@ -1,8 +1,9 @@
 'use client';
 
 import {
+  Assessment,
   Course,
-  MainContainerParams,
+  MainContainerProps,
   SelectedCoursesContextType,
 } from '../../../types/types';
 import CourseListBox from './CourseListBox';
@@ -11,8 +12,33 @@ import SearchBar from './SearchBar';
 import { createContext, useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 
-export default function MainContainer({ courses }: MainContainerParams) {
+export default function MainContainer({
+  courses,
+  assessments,
+}: MainContainerProps) {
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
+
+  function getSelectedAssessments(
+    assessments: Assessment[],
+    selectedCourses: Course[]
+  ): Assessment[] {
+    // Filters the assessments based on selected courses
+    const filteredAssessments = assessments.filter((assessment) =>
+      selectedCourses.some(
+        (course) => course.courseCode === assessment.courseCode
+      )
+    );
+
+    // Sorts based on due date and returns the result
+    return filteredAssessments.sort(
+      (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
+    );
+  }
+
+  const selectedCoursesAss = getSelectedAssessments(
+    assessments,
+    selectedCourses
+  );
 
   return (
     <SelectedCoursesContext.Provider
@@ -24,16 +50,9 @@ export default function MainContainer({ courses }: MainContainerParams) {
           <h1 className="font-bold text-black mt-4 text-2xl">
             Upcoming deadlines
           </h1>
-          {/* Maps each assessment */}
-          {selectedCourses.map((course) =>
-            course.assessmentItems.map((assessment, idx) => (
-              <DueList
-                key={`assessment${idx}`}
-                assessment={assessment}
-                courseCode={course.courseCode}
-              ></DueList>
-            ))
-          )}
+          {selectedCoursesAss.map((assessment, idx) => (
+            <DueList key={idx} assessment={assessment}></DueList>
+          ))}
         </div>
         <CourseListBox></CourseListBox>
       </section>

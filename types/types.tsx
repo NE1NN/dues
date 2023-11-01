@@ -3,30 +3,43 @@ export type Course = {
   name: string;
   courseCode: string;
   courseName: string;
-  assessmentItems: AssessmentItem[];
+  assessmentItems: Assessment[];
   progress: number;
   totalCourseMark: number;
 };
 
-export type AssessmentItem = {
+export type Assessment = {
+  id: string;
   assName: string;
   weight: number;
   startWeek: number;
   endWeek: number;
   dueDate: string;
   status: string;
+  courseCode: string;
 };
 
 export type CourseToPush = {
   courseCode: string;
   courseName: string;
-  assessmentItems: AssessmentItem[];
+  assessmentItems: Assessment[];
   progress: number;
   totalCourseMark: number;
 };
 
-export type MainContainerParams = {
+export type AssessmentToPush = {
+  assName: string;
+  weight: number;
+  startWeek: number;
+  endWeek: number;
+  dueDate: string;
+  status: string;
+  courseCode: string;
+};
+
+export type MainContainerProps = {
   courses: Course[];
+  assessments: Assessment[];
 };
 
 export type SelectedCoursesContextType = {
@@ -40,6 +53,5 @@ export type CourseListProps = {
 };
 
 export type DueListProps = {
-  assessment: AssessmentItem;
-  courseCode: string;
+  assessment: Assessment;
 };
