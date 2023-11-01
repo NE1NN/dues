@@ -23,7 +23,7 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function DueAssessments({ assessments }: AssContainerProps) {
   return (
-    <div>
+    <div className="overflow-y-auto">
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -36,12 +36,16 @@ export default function DueAssessments({ assessments }: AssContainerProps) {
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            {assessments.map((assessment, idx) => (
-              <DueList
-                key={`${assessment.id}${idx}`}
-                assessment={assessment}
-              ></DueList>
-            ))}
+            {assessments.length > 0 ? (
+              assessments.map((assessment, idx) => (
+                <DueList
+                  key={`${assessment.id}${idx}`}
+                  assessment={assessment}
+                ></DueList>
+              ))
+            ) : (
+              <p>No assessments due.</p>
+            )}
           </Typography>
         </AccordionDetails>
       </Accordion>

@@ -11,7 +11,7 @@ export default function CompletedAssessments({
   assessments,
 }: AssContainerProps) {
   return (
-    <div>
+    <div className="overflow-y-auto">
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
@@ -24,12 +24,16 @@ export default function CompletedAssessments({
         </AccordionSummary>
         <AccordionDetails>
           <Typography>
-            {assessments.map((assessment, idx) => (
-              <DueList
-                key={`${assessment.id}${idx}`}
-                assessment={assessment}
-              ></DueList>
-            ))}
+            {assessments.length > 0 ? (
+              assessments.map((assessment, idx) => (
+                <DueList
+                  key={`${assessment.id}${idx}`}
+                  assessment={assessment}
+                ></DueList>
+              ))
+            ) : (
+              <p>No assessment completed.</p>
+            )}
           </Typography>
         </AccordionDetails>
       </Accordion>
