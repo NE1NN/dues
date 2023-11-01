@@ -13,6 +13,14 @@ export default function DueList({ assessment }: DueListProps) {
     return daysDifference;
   }
 
+  function setDueString(days: number) {
+    if (days === 0) return 'due today';
+    if (days === 1) return 'due tomorrow';
+    if (days === -1) return 'due yesterday';
+
+    return days > 0 ? `due in ${days} days` : `due ${Math.abs(days)} days ago`;
+  }
+
   return (
     <div className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5">
       <Checkbox />
@@ -22,7 +30,7 @@ export default function DueList({ assessment }: DueListProps) {
           {assessment.assName}
         </div>
         <div className="text-black">
-          due in {findDaysDifference(assessment.dueDate)} days
+          {setDueString(findDaysDifference(assessment.dueDate))}
         </div>
       </div>
     </div>

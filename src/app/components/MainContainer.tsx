@@ -66,7 +66,6 @@ export default function MainContainer({
     assessments,
     selectedCourses
   );
-
   const upcomingAss = getUpcomingAssessments(selectedCoursesAss);
   const dueAss = getDueAssessments(selectedCoursesAss);
 
