@@ -35,10 +35,22 @@ export default function MainContainer({
     );
   }
 
+  function getUpcomingAssessments(assessments: Assessment[]): Assessment[] {
+    const today = new Date();
+    // Set the time to midnight to only compare by date
+    today.setHours(0, 0, 0, 0);
+
+    return assessments.filter(
+      (assessment) => new Date(assessment.dueDate) >= today
+    );
+  }
+
   const selectedCoursesAss = getSelectedAssessments(
     assessments,
     selectedCourses
   );
+
+  const upcomingAss = getUpcomingAssessments(selectedCoursesAss);
 
   return (
     <SelectedCoursesContext.Provider
@@ -50,7 +62,7 @@ export default function MainContainer({
           <h1 className="font-bold text-black mt-4 text-2xl">
             Upcoming deadlines
           </h1>
-          {selectedCoursesAss.map((assessment, idx) => (
+          {upcomingAss.map((assessment, idx) => (
             <DueList key={idx} assessment={assessment}></DueList>
           ))}
         </div>
