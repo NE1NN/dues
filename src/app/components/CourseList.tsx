@@ -1,13 +1,13 @@
-import { MouseEvent, useContext } from 'react';
-import { CourseListProps } from '../../../types/types';
-import SelectedCoursesContext from './SelectedCoursesContext';
+import { MouseEvent, useContext } from "react";
+import { CourseListProps } from "../../../types/types";
+import SelectedCoursesContext from "./SelectedCoursesContext";
 
 export default function CourseList({ course }: CourseListProps) {
   const contextValue = useContext(SelectedCoursesContext);
 
   if (!contextValue) {
     throw new Error(
-      'SelectedCoursesContext must be used within a SelectedCoursesContext.Provider'
+      "SelectedCoursesContext must be used within a SelectedCoursesContext.Provider"
     );
   }
 
@@ -20,11 +20,11 @@ export default function CourseList({ course }: CourseListProps) {
 
   return (
     <div
-      className="w-full bg-green-600 flex-1 text-black flex items-center pl-8 cursor-pointer hover:bg-green-700 transition ease-in-out"
+      className="w-full text-lg bg-green-600 text-center flex-1 text-black flex flex-col justify-center items-center cursor-pointer hover:bg-opacity-80 hover:bg-green-1000 hover:text-white transition ease-in-out rounded-lg"
       onClick={(e) => handleClick(e)}
     >
-      {course.courseCode} <br></br>
-      {course.courseName}
+      <strong>{course.courseCode}</strong>
+      <div>{course.courseName}</div>
     </div>
   );
 }
