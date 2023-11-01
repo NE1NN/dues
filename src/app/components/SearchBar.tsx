@@ -22,6 +22,7 @@ export default function SearchBar() {
     <Autocomplete
       disablePortal
       multiple
+      limitTags={4}
       id="combo-box-demo"
       options={courseList}
       sx={{ width: '40vw' }}

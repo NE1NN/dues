@@ -5,6 +5,7 @@ import { addDoc, collection } from 'firebase/firestore';
 export const data = [
   {
     courseCode: 'COMP1511',
+    courseName: 'Programming Fundamentals',
     assessmentItems: [
       {
         assName: 'Problem sets',
