@@ -11,6 +11,7 @@ import DueList from './DueList';
 import SearchBar from './SearchBar';
 import { createContext, useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
+import UpcomingAssessments from './UpcomingAssessments';
 
 export default function MainContainer({
   courses,
@@ -59,12 +60,7 @@ export default function MainContainer({
       <section className="flex h-full">
         <div className="flex flex-col">
           <SearchBar></SearchBar>
-          <h1 className="font-bold text-black mt-4 text-2xl">
-            Upcoming deadlines
-          </h1>
-          {upcomingAss.map((assessment, idx) => (
-            <DueList key={idx} assessment={assessment}></DueList>
-          ))}
+          <UpcomingAssessments upcomingAss={upcomingAss}></UpcomingAssessments>
         </div>
         <CourseListBox></CourseListBox>
       </section>

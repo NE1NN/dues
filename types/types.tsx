@@ -57,3 +57,7 @@ export type CourseListProps = {
 export type DueListProps = {
   assessment: Assessment;
 };
+
+export type UpcomingAssProps = {
+  upcomingAss: Assessment[];
+};
