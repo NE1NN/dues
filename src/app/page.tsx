@@ -1,8 +1,17 @@
-import { collection, getDocs } from 'firebase/firestore';
+import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
 import SearchBar from './components/SearchBar';
 import DueList from './components/DueList';
-import { Course } from '../../types/types';
+import {
+  Assessment,
+  AssessmentToPush,
+  Course,
+  CourseToPush,
+} from '../../types/types';
+import CourseListBox from './components/CourseListBox';
+import MainContainer from './components/MainContainer';
+import { assessments, data } from '../../firebase/data';
+import { DateTime } from 'luxon';
 
 export async function getCourses() {
   const coursesCollection = collection(db, 'courses');
@@ -19,33 +28,81 @@ export async function getCourses() {
   return courses;
 }
 
-// export async function pushCourses() {
-//   const coursesCol = collection(db, 'courses');
+export async function getAssessments() {
+  const assCollection = collection(db, 'assessments');
+  const assDocs = await getDocs(assCollection);
 
-//   data.forEach(async (course) => {
-//     try {
-//       const docRef = await addDoc(coursesCol, course);
-//       console.log('Document written with ID: ', docRef.id);
-//     } catch (err) {
-//       console.error(err);
-//     }
-//   });
-// }
+  const assessments: Assessment[] = assDocs.docs.map(
+    (doc) =>
+      ({
+        id: doc.id,
+        ...doc.data(),
+      } as Assessment)
+  );
+
+  return assessments;
+}
+
+function convertTimeToISO(data: AssessmentToPush[]) {
+  data.forEach((assignment) => {
+    const [day, month, year] = assignment.dueDate.split('/');
+    const dt = DateTime.fromObject(
+      { day: Number(day), month: Number(month), year: Number(year) },
+      { zone: 'Australia/Sydney' }
+    );
+    if (dt.isValid) {
+      assignment.dueDate = dt.toISO() || '';
+    } else {
+      console.error('Invalid date conversion:', dt.invalidExplanation);
+      assignment.dueDate = ''; // or set to some default value
+    }
+  });
+  return data;
+}
+
+export async function pushCourses() {
+  const coursesCol = collection(db, 'courses');
+
+  await Promise.all(
+    data.map(async (course) => {
+      try {
+        const docRef = await addDoc(coursesCol, course);
+        console.log('Document written with ID: ', docRef.id);
+      } catch (err) {
+        console.error(err);
+      }
+    })
+  );
+}
+
+export async function pushAssessments() {
+  const assCol = collection(db, 'assessments');
+  const converted = convertTimeToISO(assessments);
+
+  await Promise.all(
+    converted.map(async (course) => {
+      try {
+        const docRef = await addDoc(assCol, course);
+        console.log('Document written with ID: ', docRef.id);
+      } catch (err) {
+        console.error(err);
+      }
+    })
+  );
+}
 
 export default async function Home() {
+  // pushCourses();
+  // pushAssessments();
   const courses = await getCourses();
+  const assessments = await getAssessments();
+
   return (
     <main className="bg-white h-screen px-52 py-20">
-      <section className="flex h-full">
-        <div className="flex flex-col">
-          <SearchBar courses={courses}></SearchBar>
-          <h1 className="font-bold text-black mt-4 text-2xl">
-            Upcoming deadlines
-          </h1>
-          <DueList></DueList>
-        </div>
-        <aside className="w-[30%] bg-green-500 h-full ml-auto"></aside>
-      </section>
+      <MainContainer
+        courses={courses}
+        assessments={assessments}
+      ></MainContainer>
     </main>
   );
 }
