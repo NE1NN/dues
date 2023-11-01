@@ -58,6 +58,6 @@ export type DueListProps = {
   assessment: Assessment;
 };
 
-export type UpcomingAssProps = {
-  upcomingAss: Assessment[];
+export type AssContainerProps = {
+  assessments: Assessment[];
 };
