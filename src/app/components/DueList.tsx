@@ -15,12 +15,17 @@ export default function DueList({ assessment }: DueListProps) {
     );
   }
 
-  const { mutableAssessments, setMutableAssesments } = contextValue;
+  const { setMutableAssesments } = contextValue;
 
-  function handleClick() {
+  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     setMutableAssesments((prev) =>
       prev.map((ass) =>
-        ass.id === assessment.id ? { ...ass, status: 'completed' } : ass
+        ass.id === assessment.id
+          ? {
+              ...ass,
+              status: event.target.checked ? 'completed' : 'incomplete',
+            }
+          : ass
       )
     );
   }
@@ -43,7 +48,10 @@ export default function DueList({ assessment }: DueListProps) {
 
   return (
     <div className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5">
-      <Checkbox onClick={handleClick} />
+      <Checkbox
+        onChange={handleChange}
+        checked={assessment.status === 'completed' ? true : false}
+      />
       <div>
         <div className="text-black">
           <strong>{assessment.courseCode} </strong>
