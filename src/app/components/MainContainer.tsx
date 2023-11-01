@@ -13,6 +13,7 @@ import { createContext, useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
+import CompletedAssessments from './CompletedAssessments';
 
 export default function MainContainer({
   courses,
@@ -62,12 +63,21 @@ export default function MainContainer({
     );
   }
 
+  function getCompletedAssessments(assessments: Assessment[]): Assessment[] {
+    const filteredAss = assessments.filter(
+      (assessment) => assessment.status === 'completed'
+    );
+
+    return filteredAss;
+  }
+
   const selectedCoursesAss = getSelectedAssessments(
     assessments,
     selectedCourses
   );
   const upcomingAss = getUpcomingAssessments(selectedCoursesAss);
   const dueAss = getDueAssessments(selectedCoursesAss);
+  const completedAss = getCompletedAssessments(selectedCoursesAss);
 
   return (
     <SelectedCoursesContext.Provider
@@ -76,6 +86,9 @@ export default function MainContainer({
       <section className="flex h-full">
         <div className="flex flex-col">
           <SearchBar></SearchBar>
+          <CompletedAssessments
+            assessments={completedAss}
+          ></CompletedAssessments>
           <DueAssessments assessments={dueAss}></DueAssessments>
           <UpcomingAssessments assessments={upcomingAss}></UpcomingAssessments>
         </div>
