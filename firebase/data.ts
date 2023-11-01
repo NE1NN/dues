@@ -47,11 +47,11 @@ export const data = [
 
 const coursesCol = collection(db, 'courses');
 
-data.forEach(async (course) => {
-  try {
-    const docRef = await addDoc(coursesCol, course);
-    console.log('Document written with ID: ', docRef.id);
-  } catch (err) {
-    console.error(err);
-  }
-});
+// data.forEach(async (course) => {
+//   try {
+//     const docRef = await addDoc(coursesCol, course);
+//     console.log('Document written with ID: ', docRef.id);
+//   } catch (err) {
+//     console.error(err);
+//   }
+// });
