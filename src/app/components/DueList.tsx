@@ -48,7 +48,7 @@ export default function DueList({ assessment }: DueListProps) {
   }
 
   return (
-    <div className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5">
+    <div className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5" onClick={e => e.stopPropagation()}>
       <Checkbox
         onChange={handleChange}
         checked={assessment.status === 'completed' ? true : false}
