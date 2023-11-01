@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
 import {
   Assessment,
   Course,
   MainContainerProps,
   SelectedCoursesContextType,
-} from '../../../types/types';
-import CourseListBox from './CourseListBox';
-import DueList from './DueList';
-import SearchBar from './SearchBar';
-import { createContext, useContext, useState } from 'react';
-import SelectedCoursesContext from './SelectedCoursesContext';
-import UpcomingAssessments from './UpcomingAssessments';
-import DueAssessments from './DueAssessments';
-import CompletedAssessments from './CompletedAssessments';
+} from "../../../types/types";
+import CourseListBox from "./CourseListBox";
+import DueList from "./DueList";
+import SearchBar from "./SearchBar";
+import { createContext, useContext, useState } from "react";
+import SelectedCoursesContext from "./SelectedCoursesContext";
+import UpcomingAssessments from "./UpcomingAssessments";
+import DueAssessments from "./DueAssessments";
+import CompletedAssessments from "./CompletedAssessments";
 
 export default function MainContainer({
   courses,
@@ -21,7 +21,7 @@ export default function MainContainer({
 }: MainContainerProps) {
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
-  const [clickedCourse, setClickedCourse] = useState('');
+  const [clickedCourse, setClickedCourse] = useState("");
   const [isLocked, setIsLocked] = useState(false);
 
   function getSelectedAssessments(
@@ -35,7 +35,7 @@ export default function MainContainer({
       )
     );
 
-    if (clickedCourse !== '') {
+    if (clickedCourse !== "") {
       filteredAssessments = filteredAssessments.filter(
         (assessment) => assessment.courseCode === clickedCourse
       );
@@ -52,7 +52,7 @@ export default function MainContainer({
     const filteredAss = assessments.filter(
       (assessment) =>
         new Date(assessment.dueDate) >= today &&
-        assessment.status !== 'completed'
+        assessment.status !== "completed"
     );
 
     return filteredAss.sort(
@@ -68,7 +68,7 @@ export default function MainContainer({
     const filteredAss = assessments.filter(
       (assessment) =>
         new Date(assessment.dueDate) < today &&
-        assessment.status !== 'completed'
+        assessment.status !== "completed"
     );
 
     return filteredAss.sort(
@@ -78,7 +78,7 @@ export default function MainContainer({
 
   function getCompletedAssessments(assessments: Assessment[]): Assessment[] {
     const filteredAss = assessments.filter(
-      (assessment) => assessment.status === 'completed'
+      (assessment) => assessment.status === "completed"
     );
 
     return filteredAss;
@@ -106,9 +106,9 @@ export default function MainContainer({
     >
       <section
         className="flex h-full  px-52 py-20"
-        onClick={() => setClickedCourse('')}
+        onClick={() => setClickedCourse("")}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-5">
           <SearchBar isLocked={isLocked}></SearchBar>
           <CompletedAssessments
             assessments={completedAss}
