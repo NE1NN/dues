@@ -12,7 +12,7 @@ export default function UpcomingAssessments({
 }: AssContainerProps) {
   return (
     <div>
-      <Accordion>
+      <Accordion defaultExpanded={true}>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
