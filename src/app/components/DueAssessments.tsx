@@ -23,12 +23,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 export default function DueAssessments({ assessments }: AssContainerProps) {
   return (
-    <div className="overflow-y-auto">
+    <div>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          style={{ position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'white' }}
         >
           <Typography className="font-bold text-black mt-4 text-2xl">
             Due Assessments

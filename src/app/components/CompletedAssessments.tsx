@@ -11,12 +11,13 @@ export default function CompletedAssessments({
   assessments,
 }: AssContainerProps) {
   return (
-    <div className="overflow-y-auto">
+    <div>
       <Accordion>
         <AccordionSummary
           expandIcon={<ExpandMoreIcon />}
           aria-controls="panel1a-content"
           id="panel1a-header"
+          style={{ position: 'sticky', top: 0, zIndex: 1, backgroundColor: 'white' }}
         >
           <Typography className="font-bold text-black mt-4 text-2xl">
             Completed
