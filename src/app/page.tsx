@@ -98,7 +98,7 @@ export default async function Home() {
   const assessments = await getAssessments();
 
   return (
-    <main className="bg-white h-screen px-52 py-20">
+    <main className="bg-white h-screen">
       <MainContainer
         courses={courses}
         assessments={assessments}

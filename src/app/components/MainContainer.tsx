@@ -104,7 +104,10 @@ export default function MainContainer({
         setClickedCourse,
       }}
     >
-      <section className="flex h-full" onClick={() => setClickedCourse('')}>
+      <section
+        className="flex h-full  px-52 py-20"
+        onClick={() => setClickedCourse('')}
+      >
         <div className="flex flex-col">
           <SearchBar isLocked={isLocked}></SearchBar>
           <CompletedAssessments
