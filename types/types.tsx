@@ -48,6 +48,10 @@ export type SelectedCoursesContextType = {
   courses: Course[];
   selectedCourses: Course[];
   setSelectedCourses: React.Dispatch<React.SetStateAction<Course[]>>;
+  mutableAssessments: Assessment[];
+  setMutableAssesments: React.Dispatch<React.SetStateAction<Assessment[]>>;
+  clickedCourse: string;
+  setClickedCourse: React.Dispatch<React.SetStateAction<string>>;
 };
 
 export type CourseListProps = {
@@ -56,4 +60,17 @@ export type CourseListProps = {
 
 export type DueListProps = {
   assessment: Assessment;
+};
+
+export type AssContainerProps = {
+  assessments: Assessment[];
+};
+
+export type SearchBarProps = {
+  isLocked: boolean;
+};
+
+export type CourseListBoxProps = {
+  isLocked: boolean;
+  setIsLocked: React.Dispatch<React.SetStateAction<boolean>>;
 };

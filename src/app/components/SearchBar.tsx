@@ -1,11 +1,11 @@
 'use client';
 
-import { Autocomplete, TextField } from '@mui/material';
-import { Course } from '../../../types/types';
+import { Autocomplete, Chip, TextField } from '@mui/material';
+import { Course, SearchBarProps } from '../../../types/types';
 import { useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 
-export default function SearchBar() {
+export default function SearchBar({ isLocked }: SearchBarProps) {
   const contextValue = useContext(SelectedCoursesContext);
   const [autocompleteValue, setAutocompleteValue] = useState<string[]>([]);
 
@@ -31,6 +31,26 @@ export default function SearchBar() {
       renderInput={(params) => (
         <TextField {...params} placeholder="Search Course" />
       )}
+      ////// Removes warning error due to how next js renders components
+      renderOption={(props, option) => {
+        return (
+          <li {...props} key={option}>
+            {option}
+          </li>
+        );
+      }}
+      renderTags={(tagValue, getTagProps) => {
+        return tagValue.map((option, index) => (
+          <Chip
+            {...getTagProps({ index })}
+            key={option}
+            label={option}
+            disabled={isLocked}
+          />
+        ));
+      }}
+      /////////////////////////////////////////////////////////////////
+
       onChange={(event, value) => {
         setAutocompleteValue(value);
         // Filters the courses so that it contains the values
