@@ -17,6 +17,7 @@ export type Assessment = {
   dueDate: string;
   status: string;
   courseCode: string;
+  isWeekly: boolean;
 };
 
 export type CourseToPush = {
@@ -35,6 +36,7 @@ export type AssessmentToPush = {
   dueDate: string;
   status: string;
   courseCode: string;
+  isWeekly: boolean;
 };
 
 export type MainContainerProps = {
