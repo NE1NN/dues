@@ -18,7 +18,7 @@ export default function DueList({ assessment }: DueListProps) {
 
   const { setMutableAssesments, userId } = contextValue;
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.stopPropagation();
     const newStatus = event.target.checked ? 'completed' : 'incomplete';
     setMutableAssesments((prev) =>
@@ -32,7 +32,7 @@ export default function DueList({ assessment }: DueListProps) {
       )
     );
     if (userId) {
-      updateUserAssessment(userId, assessment.id, newStatus);
+      await updateUserAssessment(userId, assessment.id, newStatus);
     }
   }
 

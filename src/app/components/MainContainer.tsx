@@ -15,7 +15,12 @@ import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
 import CompletedAssessments from './CompletedAssessments';
 import { signInAnonymous } from '../../../firebase/auth';
-import { getSelectedCourses, pushAssessmentNewUser } from '../../../firebase/helper';
+import {
+  getSelectedCourses,
+  getUserAssessments,
+  pushAssessmentNewUser,
+} from '../../../firebase/helper';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function MainContainer({
   courses,
@@ -87,24 +92,32 @@ export default function MainContainer({
     return filteredAss;
   }
 
-  // Gets the user credential from local storage, if not stored yet then create a new user id
   useEffect(() => {
-    async function getUserCredential() {
-      let userCredential = localStorage.getItem('userid');
-      if (!userCredential) {
-        userCredential = await signInAnonymous();
-        if (userCredential) {
-          localStorage.setItem('userid', userCredential);
-          setUserId(userCredential);
-          await pushAssessmentNewUser(userCredential, assessments)
-        } else {
-          console.log('Cannot set item to localStorage');
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        const uid = user.uid;
+        setUserId(uid);
+
+        // Get assessments from the database
+        const userAssessments = await getUserAssessments(uid);
+        if (userAssessments) {
+          setMutableAssesments(userAssessments);
         }
       } else {
-        setUserId(userCredential);
+        // User not signed in
+        const uid = await signInAnonymous();
+        if (uid) {
+          setUserId(uid);
+          await pushAssessmentNewUser(uid, assessments);
+        }
       }
-    }
-    getUserCredential();
+    });
+
+    return () => {
+      unsubscribe();
+    };
   }, [assessments]);
 
   useEffect(() => {
@@ -137,7 +150,7 @@ export default function MainContainer({
         setMutableAssesments,
         clickedCourse,
         setClickedCourse,
-        userId
+        userId,
       }}
     >
       <section

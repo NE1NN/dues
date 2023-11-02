@@ -56,21 +56,21 @@ export async function getSelectedCourses(
   }
 }
 
-export async function getUserAssessments(userId: string) {
-  const userRef = doc(db, 'users', userId);
-  const assCol = collection(userRef, 'assessments');
-  const assDocs = await getDocs(assCol);
+// export async function getUserAssessments(userId: string) {
+//   const userRef = doc(db, 'users', userId);
+//   const assCol = collection(userRef, 'assessments');
+//   const assDocs = await getDocs(assCol);
 
-  const assessments: Assessment[] = assDocs.docs.map(
-    (doc) =>
-      ({
-        id: doc.id,
-        ...doc.data(),
-      } as Assessment)
-  );
+//   const assessments: Assessment[] = assDocs.docs.map(
+//     (doc) =>
+//       ({
+//         id: doc.id,
+//         ...doc.data(),
+//       } as Assessment)
+//   );
 
-  return assessments;
-}
+//   return assessments;
+// }
 
 function convertTimeToISO(data: AssessmentToPush[]) {
   data.forEach((assignment) => {
@@ -98,14 +98,44 @@ export async function pushAssessmentNewUser(
 
   await Promise.all(
     assessments.map(async (assessment) => {
+      const assDocRef = doc(userRef, 'assessments', assessment.id);
       try {
-        const docRef = await addDoc(assCol, assessment);
-        console.log('Assessment written to new user with ID: ', docRef.id);
+        await setDoc(assDocRef, assessment);
+        console.log(
+          'Assessment written to new user with ID: ',
+          assDocRef.id,
+          'userid',
+          userId
+        );
       } catch (err) {
         console.error(err);
       }
     })
   );
+}
+
+export async function getUserAssessments(userId: string) {
+  const userRef = doc(db, 'users', userId);
+  const assCol = collection(userRef, 'assessments');
+
+  try {
+    const assDocs = await getDocs(assCol);
+
+    if (!assDocs.empty) {
+      const assessments: Assessment[] = [];
+      assDocs.forEach((doc) => {
+        const assessment = doc.data() as Assessment;
+        assessments.push(assessment);
+      });
+      return assessments;
+    } else {
+      console.warn('No assessments found for user');
+      return null;
+    }
+  } catch (err) {
+    console.error('Failed to get assessments' + err);
+    return null;
+  }
 }
 
 export async function updateUserAssessment(
@@ -115,10 +145,11 @@ export async function updateUserAssessment(
 ) {
   const userRef = doc(db, 'users', userId);
   const assessmentDoc = doc(userRef, 'assessments', assessmentId);
-  
+  console.log(assessmentId);
+
   try {
     await updateDoc(assessmentDoc, {
-      status: status
+      status: status,
     });
     console.log('Assessment status updated successfully');
   } catch (err) {

@@ -17,24 +17,10 @@ export const signInAnonymous = async (): Promise<string | null> => {
   const auth = getAuth();
 
   try {
-    await signInAnonymously(auth);
+    const userCredential = await signInAnonymously(auth);
+    return userCredential.user.uid;
   } catch (err) {
     console.error(err);
     return null;
   }
-
-  return new Promise((resolve) => {
-    const unsubscribe = onAuthStateChanged(auth, (user) => {
-      // Unsubscribe immediately to avoid getting called again
-      unsubscribe();
-
-      if (user) {
-        const uid = user.uid;
-        pushUser(uid);
-        resolve(uid);
-      } else {
-        resolve(null);
-      }
-    });
-  });
-};
+}
