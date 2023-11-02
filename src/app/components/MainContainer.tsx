@@ -108,13 +108,13 @@ export default function MainContainer({
         className="flex h-full  px-52 py-20"
         onClick={() => setClickedCourse('')}
       >
-        <div className="flex flex-col">
+        <div className="flex flex-col gap-5">
           <SearchBar isLocked={isLocked}></SearchBar>
+          <UpcomingAssessments assessments={upcomingAss}></UpcomingAssessments>
           <CompletedAssessments
             assessments={completedAss}
           ></CompletedAssessments>
           <DueAssessments assessments={dueAss}></DueAssessments>
-          <UpcomingAssessments assessments={upcomingAss}></UpcomingAssessments>
         </div>
         <CourseListBox
           setIsLocked={setIsLocked}
