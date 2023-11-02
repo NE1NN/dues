@@ -4,7 +4,7 @@
 // HOW TO RUN: cd src/app/, terus node pdfReader.js
 import * as pdfreader from 'pdfreader';
 
-export function PdfReader() {
+export async function PdfReader() {
 	let rows = {};
 	let data = [];
 	let output = [];
@@ -13,7 +13,7 @@ export function PdfReader() {
 		Object.keys(rows)
 			.sort((y1, y2) => parseFloat(y1) - parseFloat(y2))
 			.forEach((y) => {
-				console.log((rows[y] || []).join(''));
+				// console.log((rows[y] || []).join(''));
 				data.push((rows[y] || []).join(''));
 			});
 		return data;
@@ -27,18 +27,14 @@ export function PdfReader() {
 			} else if (!item || item.page) {
 				// end of file, or page
 				if (item && item.page && item.page == 2) {
-					const rows = printRows();
-					output = rows;
-					console.log(output);
+					const data = printRows();
+					return data;
 				}
 			} else if (item.text) {
 				(rows[item.y] = rows[item.y] || []).push(item.text);
 			}
 		}
 	);
-
-	return output;
 }
 
-const returnedData = PdfReader();
-console.log(returnedData);
+PdfReader().then((res) => console.log(res));
