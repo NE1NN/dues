@@ -15,6 +15,7 @@ import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
 import CompletedAssessments from './CompletedAssessments';
 import { signInAnonymous } from '../../../firebase/auth';
+import { getSelectedCourses } from '../../../firebase/helper';
 
 export default function MainContainer({
   courses,
@@ -105,6 +106,18 @@ export default function MainContainer({
     getUserCredential();
   }, []);
 
+  useEffect(() => {
+    async function getInitialSelectedCourses(userId: string | null) {
+      if (userId) {
+        const initialSelectedCourses = await getSelectedCourses(userId);
+        if (initialSelectedCourses) {
+          setSelectedCourses(initialSelectedCourses);
+        }
+      }
+    }
+    getInitialSelectedCourses(userId);
+  }, [userId]);
+
   const selectedCoursesAss = getSelectedAssessments(
     mutableAssessments,
     selectedCourses
@@ -123,6 +136,7 @@ export default function MainContainer({
         setMutableAssesments,
         clickedCourse,
         setClickedCourse,
+        userId
       }}
     >
       <section

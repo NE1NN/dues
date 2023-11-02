@@ -1,21 +1,35 @@
 import { collection, doc, getDoc, setDoc, updateDoc } from 'firebase/firestore';
 import { db } from './service';
+import { Course } from '../types/types';
+import { FirebaseError } from 'firebase/app';
 
-export async function pushClickedCourses(
-  userId: string,
-  clickedCourses: string[]
+export async function pushSelectedCourses(
+  userId: string | null,
+  clickedCourses: Course[]
 ) {
-  const userRef = doc(db, 'users', userId);
+  if (userId) {
+    const userRef = doc(db, 'users', userId);
 
-  try {
-    await updateDoc(userRef, { clickedCourse: clickedCourses });
-    console.log('Clicked courses updated');
-  } catch (err) {
-    console.error('Clicked courses updated failed');
+    try {
+      await updateDoc(userRef, { clickedCourse: clickedCourses });
+      console.log('Clicked courses updated');
+    } catch (err) {
+      if (err instanceof FirebaseError && err.code === "not-found") {
+        // The document doesn't exist, so create it
+        await setDoc(userRef, { clickedCourse: clickedCourses });
+        console.log('Clicked courses set for new user');
+      } else {
+        console.error('Clicked courses update failed', err);
+      }
+    }
+  } else {
+    console.log('User id null')
   }
 }
 
-export async function getClickedCourses(userId: string) {
+export async function getSelectedCourses(
+  userId: string
+): Promise<Course[] | null> {
   const userRef = doc(db, 'users', userId);
 
   try {

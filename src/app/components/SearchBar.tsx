@@ -4,6 +4,7 @@ import { Autocomplete, Chip, TextField } from '@mui/material';
 import { Course, SearchBarProps } from '../../../types/types';
 import { useContext, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
+import { pushSelectedCourses } from '../../../firebase/helper';
 
 export default function SearchBar({ isLocked }: SearchBarProps) {
   const contextValue = useContext(SelectedCoursesContext);
@@ -15,7 +16,7 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
     );
   }
 
-  const { courses, setSelectedCourses } = contextValue;
+  const { courses, setSelectedCourses, userId } = contextValue;
 
   const courseList = courses.map((course) => course.courseCode);
 
@@ -60,6 +61,12 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
         );
 
         setSelectedCourses(filteredCourses);
+
+        async function updateSelectedCourses() {
+          await pushSelectedCourses(userId, filteredCourses);
+        }
+
+        updateSelectedCourses();
       }}
     />
   );
