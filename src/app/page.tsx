@@ -81,9 +81,9 @@ export async function pushAssessments() {
   const converted = convertTimeToISO(assessments);
 
   await Promise.all(
-    converted.map(async (course) => {
+    converted.map(async (assessment) => {
       try {
-        const docRef = await addDoc(assCol, course);
+        const docRef = await addDoc(assCol, assessment);
         console.log('Document written with ID: ', docRef.id);
       } catch (err) {
         console.error(err);

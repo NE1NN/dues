@@ -15,7 +15,7 @@ import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
 import CompletedAssessments from './CompletedAssessments';
 import { signInAnonymous } from '../../../firebase/auth';
-import { getSelectedCourses } from '../../../firebase/helper';
+import { getSelectedCourses, pushAssessmentNewUser } from '../../../firebase/helper';
 
 export default function MainContainer({
   courses,
@@ -96,6 +96,7 @@ export default function MainContainer({
         if (userCredential) {
           localStorage.setItem('userid', userCredential);
           setUserId(userCredential);
+          await pushAssessmentNewUser(userCredential, assessments)
         } else {
           console.log('Cannot set item to localStorage');
         }
@@ -104,7 +105,7 @@ export default function MainContainer({
       }
     }
     getUserCredential();
-  }, []);
+  }, [assessments]);
 
   useEffect(() => {
     async function getInitialSelectedCourses(userId: string | null) {
