@@ -89,13 +89,12 @@ export default function MainContainer({
   // Gets the user credential from local storage, if not stored yet then create a new user id
   useEffect(() => {
     async function getUserCredential() {
-      const userCredential = localStorage.getItem('userid');
+      let userCredential = localStorage.getItem('userid');
       if (!userCredential) {
-        const newUserCredential = await signInAnonymous();
-        if (newUserCredential) {
-          localStorage.setItem('userid', newUserCredential);
-          console.log('User id set');
-          setUserId(newUserCredential);
+        userCredential = await signInAnonymous();
+        if (userCredential) {
+          localStorage.setItem('userid', userCredential);
+          setUserId(userCredential);
         } else {
           console.log('Cannot set item to localStorage');
         }

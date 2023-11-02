@@ -13,14 +13,14 @@ const pushUser = async (userId: string) => {
   }
 };
 
-export const signInAnonymous = async (): Promise<string | undefined> => {
+export const signInAnonymous = async (): Promise<string | null> => {
   const auth = getAuth();
 
   try {
     await signInAnonymously(auth);
   } catch (err) {
     console.error(err);
-    return undefined;
+    return null;
   }
 
   return new Promise((resolve) => {
@@ -33,7 +33,7 @@ export const signInAnonymous = async (): Promise<string | undefined> => {
         pushUser(uid);
         resolve(uid);
       } else {
-        resolve(undefined);
+        resolve(null);
       }
     });
   });
