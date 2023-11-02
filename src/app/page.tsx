@@ -12,6 +12,7 @@ import CourseListBox from './components/CourseListBox';
 import MainContainer from './components/MainContainer';
 import { assessments, data } from '../../firebase/data';
 import { DateTime } from 'luxon';
+import { signInAnonymous } from '../../firebase/auth';
 
 export async function getCourses() {
   const coursesCollection = collection(db, 'courses');
@@ -94,6 +95,7 @@ export async function pushAssessments() {
 export default async function Home() {
   // pushCourses();
   // pushAssessments();
+  // signInAnonymous();
   const courses = await getCourses();
   const assessments = await getAssessments();
 

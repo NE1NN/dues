@@ -9,11 +9,12 @@ import {
 import CourseListBox from './CourseListBox';
 import DueList from './DueList';
 import SearchBar from './SearchBar';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
 import CompletedAssessments from './CompletedAssessments';
+import { signInAnonymous } from '../../../firebase/auth';
 
 export default function MainContainer({
   courses,
@@ -23,6 +24,7 @@ export default function MainContainer({
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
   const [clickedCourse, setClickedCourse] = useState('');
   const [isLocked, setIsLocked] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
 
   function getSelectedAssessments(
     assessments: Assessment[],
@@ -83,6 +85,26 @@ export default function MainContainer({
 
     return filteredAss;
   }
+
+  // Gets the user credential from local storage, if not stored yet then create a new user id
+  useEffect(() => {
+    async function getUserCredential() {
+      const userCredential = localStorage.getItem('userid');
+      if (!userCredential) {
+        const newUserCredential = await signInAnonymous();
+        if (newUserCredential) {
+          localStorage.setItem('userid', newUserCredential);
+          console.log('User id set');
+          setUserId(newUserCredential);
+        } else {
+          console.log('Cannot set item to localStorage');
+        }
+      } else {
+        setUserId(userCredential);
+      }
+    }
+    getUserCredential();
+  }, []);
 
   const selectedCoursesAss = getSelectedAssessments(
     mutableAssessments,
