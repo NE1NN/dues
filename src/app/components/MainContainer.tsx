@@ -24,7 +24,7 @@ export default function MainContainer({
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
   const [clickedCourse, setClickedCourse] = useState('');
-  const [isLocked, setIsLocked] = useState(false);
+  const [isLocked, setIsLocked] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
 
   function getSelectedAssessments(
