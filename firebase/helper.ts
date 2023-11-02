@@ -108,11 +108,20 @@ export async function pushAssessmentNewUser(
   );
 }
 
-// export async function pushUserAssessments(
-//   userId: string,
-//   assessments: Assessment[]
-// ) {
-//   const userRef = doc(db, 'users', userId);
-//   const assCol = collection(userRef, 'assessments');
-//   const converted =
-// }
+export async function updateUserAssessment(
+  userId: string,
+  assessmentId: string,
+  status: 'completed' | 'incomplete'
+) {
+  const userRef = doc(db, 'users', userId);
+  const assessmentDoc = doc(userRef, 'assessments', assessmentId);
+  
+  try {
+    await updateDoc(assessmentDoc, {
+      status: status
+    });
+    console.log('Assessment status updated successfully');
+  } catch (err) {
+    console.error('Error updating assessment status: ', err);
+  }
+}
