@@ -56,39 +56,6 @@ export async function getSelectedCourses(
   }
 }
 
-// export async function getUserAssessments(userId: string) {
-//   const userRef = doc(db, 'users', userId);
-//   const assCol = collection(userRef, 'assessments');
-//   const assDocs = await getDocs(assCol);
-
-//   const assessments: Assessment[] = assDocs.docs.map(
-//     (doc) =>
-//       ({
-//         id: doc.id,
-//         ...doc.data(),
-//       } as Assessment)
-//   );
-
-//   return assessments;
-// }
-
-function convertTimeToISO(data: AssessmentToPush[]) {
-  data.forEach((assignment) => {
-    const [day, month, year] = assignment.dueDate.split('/');
-    const dt = DateTime.fromObject(
-      { day: Number(day), month: Number(month), year: Number(year) },
-      { zone: 'Australia/Sydney' }
-    );
-    if (dt.isValid) {
-      assignment.dueDate = dt.toISO() || '';
-    } else {
-      console.error('Invalid date conversion:', dt.invalidExplanation);
-      assignment.dueDate = ''; // or set to some default value
-    }
-  });
-  return data;
-}
-
 export async function pushAssessmentNewUser(
   userId: string,
   assessments: Assessment[]

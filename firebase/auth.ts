@@ -1,4 +1,4 @@
-import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
+import { getAuth, signInAnonymously, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, linkWithCredential } from 'firebase/auth';
 import { db } from './service';
 import { addDoc, collection } from 'firebase/firestore';
 
