@@ -34,7 +34,12 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
       id="combo-box-demo"
       options={courseList}
       value={autocompleteValue}
-      sx={{ width: '40vw' }}
+      sx={{
+        width: '40vw',  // Default width for screens wider than 872px
+        '@media (max-width: 872px)': {
+          width: '100%',  // Full width for screens narrower than 872px
+        },
+      }}
       renderInput={(params) => (
         <TextField {...params} placeholder="Search Course" />
       )}

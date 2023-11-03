@@ -27,7 +27,7 @@ export default function CourseListBox({
   const { selectedCourses } = contextValue;
 
   return (
-    <aside className="w-[30%] bg-white h-full ml-auto flex flex-col p-8 justify-between gap-8 relative border-2 rounded-lg border-green-500">
+<aside className="w-full lg:w-[30%] bg-white h-full ml-auto mr-auto lg:mr-0 flex flex-col p-8 justify-between gap-8 relative border-2 rounded-lg border-green-500 text-sm lg:mx-auto">
       <div
         className="absolute right-[-10px] top-[-10px] cursor-pointer bg-green-600 rounded-full w-9 h-9 flex items-center justify-center hover:opacity-60"
         onClick={(e) => handleLockClick(e)}
