@@ -6,6 +6,7 @@ import {
   signInWithPopup,
   linkWithCredential,
   fetchSignInMethodsForEmail,
+  linkWithPopup,
 } from 'firebase/auth';
 import { db } from './service';
 import { addDoc, collection } from 'firebase/firestore';
@@ -39,17 +40,22 @@ export const upgradeAnonymousToGoogle = async () => {
   const auth = getAuth();
   if (auth.currentUser && auth.currentUser.isAnonymous) {
     try {
+      // const provider = new GoogleAuthProvider();
+      // const result = await linkWithPopup(auth, provider);
+      // const credential = GoogleAuthProvider.credentialFromResult(result);
+      // // const credential = GoogleAuthProvider.credential()
+      // console.log(credential)
+      // if (credential) {
+      //   await linkWithCredential(auth.currentUser, credential);
+      //   console.log('Anonymous account upgraded to Google');
+      // } else {
+      //   console.log('Anonymous account failed to upgrade to Google');
+      // }
+      const anonymousUser = auth.currentUser;
       const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
-      const credential = GoogleAuthProvider.credentialFromResult(result);
-      // const credential = GoogleAuthProvider.credential()
-      console.log(credential)
-      if (credential) {
-        await linkWithCredential(auth.currentUser, credential);
-        console.log('Anonymous account upgraded to Google');
-      } else {
-        console.log('Anonymous account failed to upgrade to Google');
-      }
+
+      await linkWithPopup(anonymousUser, provider);
+      console.log('Linking successful');
     } catch (err) {
       console.error(err);
       // if (err instanceof FirebaseError) {
