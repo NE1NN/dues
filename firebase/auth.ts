@@ -41,24 +41,12 @@ export const upgradeAnonymousToGoogle = async () => {
   const auth = getAuth();
   if (auth.currentUser && auth.currentUser.isAnonymous) {
     try {
-      // const provider = new GoogleAuthProvider();
-      // const result = await linkWithPopup(auth, provider);
-      // const credential = GoogleAuthProvider.credentialFromResult(result);
-      // // const credential = GoogleAuthProvider.credential()
-      // console.log(credential)
-      // if (credential) {
-      //   await linkWithCredential(auth.currentUser, credential);
-      //   console.log('Anonymous account upgraded to Google');
-      // } else {
-      //   console.log('Anonymous account failed to upgrade to Google');
-      // }
       const anonymousUser = auth.currentUser;
       const provider = new GoogleAuthProvider();
 
       await linkWithPopup(anonymousUser, provider);
       console.log('Linking successful');
     } catch (err) {
-      console.error(err);
       if (
         err instanceof FirebaseError &&
         err.code === 'auth/credential-already-in-use'
@@ -66,27 +54,10 @@ export const upgradeAnonymousToGoogle = async () => {
         const credential = GoogleAuthProvider.credentialFromError(err);
         if (credential) {
           await signInWithCredential(auth, credential);
-          console.log('signed in with credential');
         } else {
           console.log('no credential');
         }
       }
-      // if (err instanceof FirebaseError) {
-      //   if (
-      //     err.code === 'auth/credential-already-in-use' ||
-      //     err.code === 'auth/email-already-in-use'
-      //   ) {
-      //     const methods = await fetchSignInMethodsForEmail(auth, err.email);
-      //     if (methods.includes(GoogleAuthProvider.PROVIDER_ID)) {
-      //       await signInWithPopup(auth, provider);
-      //       console.log('User signed in with existing account');
-      //     } else {
-      //       console.log('This email is associated with another sign-in method');
-      //     }
-      //   } else {
-      //     console.error('Error upgrading anonymous account', err);
-      //   }
-      // }
     }
   } else {
     console.log('No anonymous user to upgrade');
