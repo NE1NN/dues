@@ -1,17 +1,12 @@
 import {
   getAuth,
   signInAnonymously,
-  onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup,
-  linkWithCredential,
-  fetchSignInMethodsForEmail,
   linkWithPopup,
   signInWithCredential,
 } from 'firebase/auth';
 import { db } from './service';
 import { addDoc, collection } from 'firebase/firestore';
-import { error } from 'console';
 import { FirebaseError } from 'firebase/app';
 
 const pushUser = async (userId: string) => {

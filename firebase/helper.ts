@@ -8,9 +8,8 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import { db } from './service';
-import { Assessment, AssessmentToPush, Course } from '../types/types';
+import { Assessment, Course } from '../types/types';
 import { FirebaseError } from 'firebase/app';
-import { DateTime } from 'luxon';
 
 export async function pushSelectedCourses(
   userId: string | null,
