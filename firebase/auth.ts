@@ -7,6 +7,7 @@ import {
   linkWithCredential,
   fetchSignInMethodsForEmail,
   linkWithPopup,
+  signInWithCredential,
 } from 'firebase/auth';
 import { db } from './service';
 import { addDoc, collection } from 'firebase/firestore';
@@ -58,6 +59,18 @@ export const upgradeAnonymousToGoogle = async () => {
       console.log('Linking successful');
     } catch (err) {
       console.error(err);
+      if (
+        err instanceof FirebaseError &&
+        err.code === 'auth/credential-already-in-use'
+      ) {
+        const credential = GoogleAuthProvider.credentialFromError(err);
+        if (credential) {
+          await signInWithCredential(auth, credential);
+          console.log('signed in with credential');
+        } else {
+          console.log('no credential');
+        }
+      }
       // if (err instanceof FirebaseError) {
       //   if (
       //     err.code === 'auth/credential-already-in-use' ||
