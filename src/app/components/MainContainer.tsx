@@ -9,11 +9,18 @@ import {
 import CourseListBox from './CourseListBox';
 import DueList from './DueList';
 import SearchBar from './SearchBar';
-import { createContext, useContext, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';
 import CompletedAssessments from './CompletedAssessments';
+import { signInAnonymous } from '../../../firebase/auth';
+import {
+  getSelectedCourses,
+  getUserAssessments,
+  pushAssessmentNewUser,
+} from '../../../firebase/helper';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
 export default function MainContainer({
   courses,
@@ -22,7 +29,8 @@ export default function MainContainer({
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
   const [clickedCourse, setClickedCourse] = useState('');
-  const [isLocked, setIsLocked] = useState(false);
+  const [isLocked, setIsLocked] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   function getSelectedAssessments(
     assessments: Assessment[],
@@ -84,6 +92,46 @@ export default function MainContainer({
     return filteredAss;
   }
 
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        const uid = user.uid;
+        setUserId(uid);
+
+        // Get assessments from the database
+        const userAssessments = await getUserAssessments(uid);
+        if (userAssessments) {
+          setMutableAssesments(userAssessments);
+        }
+      } else {
+        // User not signed in
+        const uid = await signInAnonymous();
+        if (uid) {
+          setUserId(uid);
+          await pushAssessmentNewUser(uid, assessments);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [assessments]);
+
+  useEffect(() => {
+    async function getInitialSelectedCourses(userId: string | null) {
+      if (userId) {
+        const initialSelectedCourses = await getSelectedCourses(userId);
+        if (initialSelectedCourses) {
+          setSelectedCourses(initialSelectedCourses);
+        }
+      }
+    }
+    getInitialSelectedCourses(userId);
+  }, [userId]);
+
   const selectedCoursesAss = getSelectedAssessments(
     mutableAssessments,
     selectedCourses
@@ -102,6 +150,7 @@ export default function MainContainer({
         setMutableAssesments,
         clickedCourse,
         setClickedCourse,
+        userId,
       }}
     >
       <section

@@ -12,6 +12,7 @@ import CourseListBox from './components/CourseListBox';
 import MainContainer from './components/MainContainer';
 import { assessments, data } from '../../firebase/data';
 import { DateTime } from 'luxon';
+import { signInAnonymous } from '../../firebase/auth';
 
 export async function getCourses() {
   const coursesCollection = collection(db, 'courses');
@@ -80,9 +81,9 @@ export async function pushAssessments() {
   const converted = convertTimeToISO(assessments);
 
   await Promise.all(
-    converted.map(async (course) => {
+    converted.map(async (assessment) => {
       try {
-        const docRef = await addDoc(assCol, course);
+        const docRef = await addDoc(assCol, assessment);
         console.log('Document written with ID: ', docRef.id);
       } catch (err) {
         console.error(err);
@@ -94,6 +95,7 @@ export async function pushAssessments() {
 export default async function Home() {
   // pushCourses();
   // pushAssessments();
+  // signInAnonymous();
   const courses = await getCourses();
   const assessments = await getAssessments();
 

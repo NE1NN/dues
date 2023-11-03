@@ -52,6 +52,7 @@ export type SelectedCoursesContextType = {
   setMutableAssesments: React.Dispatch<React.SetStateAction<Assessment[]>>;
   clickedCourse: string;
   setClickedCourse: React.Dispatch<React.SetStateAction<string>>;
+  userId: string | null;
 };
 
 export type CourseListProps = {
@@ -74,3 +75,8 @@ export type CourseListBoxProps = {
   isLocked: boolean;
   setIsLocked: React.Dispatch<React.SetStateAction<boolean>>;
 };
+
+export type pushCoursesError = {
+  code: string;
+  message: string;
+}
