@@ -2,7 +2,6 @@ import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
 import SearchBar from './components/SearchBar';
 import DueList from './components/DueList';
-import Pdf from './components/Pdf';
 import {
 	Assessment,
 	AssessmentToPush,
@@ -103,7 +102,6 @@ export default async function Home() {
 
 	return (
 		<main className="bg-white h-screen">
-			<Pdf />
 			<MainContainer
 				courses={courses}
 				assessments={assessments}

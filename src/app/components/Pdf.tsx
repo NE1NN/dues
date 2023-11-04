@@ -8,6 +8,7 @@ import { data, assessments } from '../../../firebase/data';
 
 export default function Pdf() {
 	const [rawData, setRawData] = useState<File>();
+	const [hasUploaded, setHasUploaded] = useState<boolean>(false);
 
 	const VisuallyHiddenInput = styled('input')({
 		clip: 'rect(0 0 0 0)',
@@ -199,6 +200,8 @@ export default function Pdf() {
 			const fileReader = new FileReader();
 			const input = await readFileAsArrayBuffer(rawData);
 			const output = await pdfToText(input as unknown as ArrayBuffer);
+			setRawData(undefined);
+			setHasUploaded(true);
 		} else {
 			alert('ERROR: cannot parse, no file uploaded');
 		}
@@ -206,12 +209,33 @@ export default function Pdf() {
 
 	return (
 		<div>
-			<h1 className="font-bold text-black mt-4 text-2xl">PDF Reader</h1>
-			<Button component="label" variant="contained" startIcon={<CloudUpload />}>
-				Upload File
-				<VisuallyHiddenInput type="file" onChange={handleFileChange} />
-			</Button>
-			<Button onClick={handleParseButton}>Parse Data</Button>
+			{/* {!hasUploaded && ( */}
+			<>
+				<div className="text-black text-xs mb-2">
+					Course not found? Upload course outline PDF
+				</div>
+				<div className="space-x-3 mb-2">
+					<Button
+						component="label"
+						variant="contained"
+						// startIcon={<CloudUpload />}
+						className="bg-green-600 hover:opacity-70 hover:bg-green-600 text-xs"
+					>
+						Choose File
+						<VisuallyHiddenInput type="file" onChange={handleFileChange} />
+					</Button>
+					{rawData && (
+						<Button
+							variant="contained"
+							onClick={handleParseButton}
+							className="border-green-600 hover:border-green-600 text-green-600 hover:bg-white hover:opacity-70 text-xs"
+						>
+							Upload
+						</Button>
+					)}
+				</div>
+			</>
+			{/* )} */}
 		</div>
 	);
 }
