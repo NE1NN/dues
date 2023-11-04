@@ -4,6 +4,7 @@ import * as pdfjsLib from 'pdfjs-dist';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CloudUpload } from '@mui/icons-material';
+import { data, assessments } from '../../../firebase/data';
 
 export default function Pdf() {
 	const [rawData, setRawData] = useState<File>();
@@ -72,10 +73,10 @@ export default function Pdf() {
 		return str;
 	};
 
-	const extractAssessmentsInfo = (data: string[]) => {
+	const extractAssessmentsInfo = (input: string[]) => {
 		let output: any = [];
 		let temp = [];
-		for (let assessment of data) {
+		for (let assessment of input) {
 			temp.push(assessment.trim());
 		}
 		temp = temp.filter((item) => item !== '');
@@ -112,16 +113,18 @@ export default function Pdf() {
 		const filter2 = filter1.filter((item) => !item.includes('%'));
 		const cleanArr = filter2.join(' ');
 		const splitByPM = cleanArr.split('PM');
-		const assessments = extractAssessmentsInfo(splitByPM);
+		const extracted = extractAssessmentsInfo(splitByPM);
 		const course = {
 			courseCode: 'COMP3421',
 			courseName: 'Computer Graphics',
 			progress: 30,
 			totalCourseMark: 25,
 		};
-		console.log('Assessments:', assessments);
+		data.push(course);
+		assessments.push(extracted);
+		console.log('Assessments:', extracted);
 		console.log('Course:', course);
-		return assessments;
+		return extracted;
 	};
 
 	const extraction1 = (text: string) => {
@@ -195,7 +198,7 @@ export default function Pdf() {
 		if (rawData) {
 			const fileReader = new FileReader();
 			const input = await readFileAsArrayBuffer(rawData);
-			const assessments = await pdfToText(input as unknown as ArrayBuffer);
+			const output = await pdfToText(input as unknown as ArrayBuffer);
 		} else {
 			alert('ERROR: cannot parse, no file uploaded');
 		}
