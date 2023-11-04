@@ -87,8 +87,15 @@ export default function Pdf() {
 
 			if (name.trim() !== 'and') {
 				output.push({
-					name: name.trim(),
+					assName: name.trim(),
 					dueDate: dueDate.replace('11:59', '').trim().replace('2023', '23'),
+					weight: 15,
+					startWeek: 2,
+					endWeek: 10,
+					status: 'ongoing',
+					isWeekly: false,
+					dueDay: 4,
+					courseCode: 'COMP3421',
 				});
 			}
 		});
@@ -106,6 +113,14 @@ export default function Pdf() {
 		const cleanArr = filter2.join(' ');
 		const splitByPM = cleanArr.split('PM');
 		const assessments = extractAssessmentsInfo(splitByPM);
+		const course = {
+			courseCode: 'COMP3421',
+			courseName: 'Computer Graphics',
+			progress: 30,
+			totalCourseMark: 25,
+		};
+		console.log('Assessments:', assessments);
+		console.log('Course:', course);
 		return assessments;
 	};
 
@@ -113,7 +128,6 @@ export default function Pdf() {
 		// extracts assessments from the whole page data
 		const start = text.indexOf('Relevant Dates') + 'Relevant Dates '.length;
 		const end = text.indexOf('Assessment Details');
-		console.log(text.slice(start, end));
 		extraction2(text.slice(start, end));
 		return text.slice(start, end);
 	};
