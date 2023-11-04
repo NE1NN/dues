@@ -1,11 +1,12 @@
-'use client';
+"use client";
 
-import { upgradeAnonymousToGoogle } from '../../../firebase/auth';
+import { upgradeAnonymousToGoogle } from "../../../firebase/auth";
+import { GoogleLoginButton } from "react-social-login-buttons";
 
 export default function Login() {
   return (
-    <button onClick={upgradeAnonymousToGoogle} className="ml-auto">
-      Login
-    </button>
+    <div className="ml-auto w-auto">
+      <GoogleLoginButton onClick={upgradeAnonymousToGoogle} />
+    </div>
   );
 }
