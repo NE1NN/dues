@@ -5,6 +5,7 @@ import { DueListProps } from '../../../types/types';
 import { DateTime } from 'luxon';
 import { useContext } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
+import { updateUserAssessment } from '../../../firebase/helper';
 
 export default function DueList({ assessment }: DueListProps) {
   const contextValue = useContext(SelectedCoursesContext);
@@ -15,20 +16,24 @@ export default function DueList({ assessment }: DueListProps) {
     );
   }
 
-  const { setMutableAssesments } = contextValue;
+  const { setMutableAssesments, userId } = contextValue;
 
-  function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
+  async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.stopPropagation();
+    const newStatus = event.target.checked ? 'completed' : 'incomplete';
     setMutableAssesments((prev) =>
       prev.map((ass) =>
         ass.id === assessment.id
           ? {
               ...ass,
-              status: event.target.checked ? 'completed' : 'incomplete',
+              status: newStatus,
             }
           : ass
       )
     );
+    if (userId) {
+      await updateUserAssessment(userId, assessment.id, newStatus);
+    }
   }
 
   function findDaysDifference(dueDate: string) {
@@ -48,7 +53,10 @@ export default function DueList({ assessment }: DueListProps) {
   }
 
   return (
-    <div className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5">
+    <div
+      className="flex bg-green-600 rounded-md border-black border items-center h-4/12 py-4 mt-5"
+      onClick={(e) => e.stopPropagation()}
+    >
       <Checkbox
         onChange={handleChange}
         checked={assessment.status === 'completed' ? true : false}

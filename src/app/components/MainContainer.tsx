@@ -1,19 +1,28 @@
-'use client';
+"use client";
 
 import {
   Assessment,
   Course,
   MainContainerProps,
   SelectedCoursesContextType,
-} from '../../../types/types';
-import CourseListBox from './CourseListBox';
-import DueList from './DueList';
-import SearchBar from './SearchBar';
-import { createContext, useContext, useState } from 'react';
-import SelectedCoursesContext from './SelectedCoursesContext';
-import UpcomingAssessments from './UpcomingAssessments';
-import DueAssessments from './DueAssessments';
-import CompletedAssessments from './CompletedAssessments';
+} from "../../../types/types";
+import CourseListBox from "./CourseListBox";
+import DueList from "./DueList";
+import SearchBar from "./SearchBar";
+import { createContext, useContext, useEffect, useState } from "react";
+import SelectedCoursesContext from "./SelectedCoursesContext";
+import UpcomingAssessments from "./UpcomingAssessments";
+import DueAssessments from "./DueAssessments";
+import CompletedAssessments from "./CompletedAssessments";
+import { signInAnonymous } from "../../../firebase/auth";
+import {
+  getSelectedCourses,
+  getUserAssessments,
+  pushAssessmentNewUser,
+} from "../../../firebase/helper";
+import { getAuth, onAuthStateChanged } from "firebase/auth";
+
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function MainContainer({
   courses,
@@ -21,8 +30,9 @@ export default function MainContainer({
 }: MainContainerProps) {
   const [selectedCourses, setSelectedCourses] = useState<Course[]>([]);
   const [mutableAssessments, setMutableAssesments] = useState(assessments);
-  const [clickedCourse, setClickedCourse] = useState('');
-  const [isLocked, setIsLocked] = useState(false);
+  const [clickedCourse, setClickedCourse] = useState("");
+  const [isLocked, setIsLocked] = useState(true);
+  const [userId, setUserId] = useState<string | null>(null);
 
   function getSelectedAssessments(
     assessments: Assessment[],
@@ -35,7 +45,7 @@ export default function MainContainer({
       )
     );
 
-    if (clickedCourse !== '') {
+    if (clickedCourse !== "") {
       filteredAssessments = filteredAssessments.filter(
         (assessment) => assessment.courseCode === clickedCourse
       );
@@ -52,7 +62,7 @@ export default function MainContainer({
     const filteredAss = assessments.filter(
       (assessment) =>
         new Date(assessment.dueDate) >= today &&
-        assessment.status !== 'completed'
+        assessment.status !== "completed"
     );
 
     return filteredAss.sort(
@@ -68,7 +78,7 @@ export default function MainContainer({
     const filteredAss = assessments.filter(
       (assessment) =>
         new Date(assessment.dueDate) < today &&
-        assessment.status !== 'completed'
+        assessment.status !== "completed"
     );
 
     return filteredAss.sort(
@@ -78,11 +88,51 @@ export default function MainContainer({
 
   function getCompletedAssessments(assessments: Assessment[]): Assessment[] {
     const filteredAss = assessments.filter(
-      (assessment) => assessment.status === 'completed'
+      (assessment) => assessment.status === "completed"
     );
 
     return filteredAss;
   }
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        // User is signed in
+        const uid = user.uid;
+        setUserId(uid);
+
+        // Get assessments from the database
+        const userAssessments = await getUserAssessments(uid);
+        if (userAssessments) {
+          setMutableAssesments(userAssessments);
+        }
+      } else {
+        // User not signed in
+        const uid = await signInAnonymous();
+        if (uid) {
+          setUserId(uid);
+          await pushAssessmentNewUser(uid, assessments);
+        }
+      }
+    });
+
+    return () => {
+      unsubscribe();
+    };
+  }, [assessments]);
+
+  useEffect(() => {
+    async function getInitialSelectedCourses(userId: string | null) {
+      if (userId) {
+        const initialSelectedCourses = await getSelectedCourses(userId);
+        if (initialSelectedCourses) {
+          setSelectedCourses(initialSelectedCourses);
+        }
+      }
+    }
+    getInitialSelectedCourses(userId);
+  }, [userId]);
 
   const selectedCoursesAss = getSelectedAssessments(
     mutableAssessments,
@@ -91,6 +141,7 @@ export default function MainContainer({
   const upcomingAss = getUpcomingAssessments(selectedCoursesAss);
   const dueAss = getDueAssessments(selectedCoursesAss);
   const completedAss = getCompletedAssessments(selectedCoursesAss);
+  const isPhoneScreen = useMediaQuery("(max-width:1023px)"); // Define your breakpoint accordingly
 
   return (
     <SelectedCoursesContext.Provider
@@ -102,25 +153,47 @@ export default function MainContainer({
         setMutableAssesments,
         clickedCourse,
         setClickedCourse,
+        userId,
       }}
     >
-      <section
-        className="flex h-full  px-52 py-20"
-        onClick={() => setClickedCourse('')}
-      >
-        <div className="flex flex-col">
+      {/* Phone Screen Layout */}
+      {isPhoneScreen ? (
+        <section className="flex mx-auto h-full pb-8"  onClick={() => setClickedCourse("")}>
+        <div className="flex flex-col gap-5 mx-auto h-full px-4 py-10 pb-8">
           <SearchBar isLocked={isLocked}></SearchBar>
-          <CompletedAssessments
-            assessments={completedAss}
-          ></CompletedAssessments>
-          <DueAssessments assessments={dueAss}></DueAssessments>
+          <CourseListBox setIsLocked={setIsLocked} isLocked={isLocked}></CourseListBox>
           <UpcomingAssessments assessments={upcomingAss}></UpcomingAssessments>
+          <CompletedAssessments assessments={completedAss}></CompletedAssessments>
+          <DueAssessments assessments={dueAss}></DueAssessments>
+          <div className="py-4"></div>
         </div>
-        <CourseListBox
-          setIsLocked={setIsLocked}
-          isLocked={isLocked}
-        ></CourseListBox>
       </section>
+      
+      // Default Layout 
+      ) : (
+        <section
+          className="flex mx-auto h-full px-52 py-20 pb-8"
+          onClick={() => setClickedCourse("")}
+        >
+          <div className="flex flex-col gap-5">
+            <SearchBar isLocked={isLocked}></SearchBar>
+            <UpcomingAssessments
+              assessments={upcomingAss}
+            ></UpcomingAssessments>
+            <CompletedAssessments
+              assessments={completedAss}
+            ></CompletedAssessments>
+            <DueAssessments assessments={dueAss}></DueAssessments>
+            <div className="h-4 py-4"></div>
+          </div>
+          <div className="my-4"></div>
+          <CourseListBox
+            setIsLocked={setIsLocked}
+            isLocked={isLocked}
+          ></CourseListBox>
+          <div className="h-4 my-4"></div>
+        </section>
+      )}
     </SelectedCoursesContext.Provider>
   );
 }

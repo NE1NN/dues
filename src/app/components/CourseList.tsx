@@ -11,7 +11,7 @@ export default function CourseList({ course }: CourseListProps) {
     );
   }
 
-  const { setClickedCourse } = contextValue;
+  const { clickedCourse, setClickedCourse } = contextValue;
 
   function handleClick(e: MouseEvent<HTMLDivElement>) {
     e.stopPropagation();
@@ -20,11 +20,15 @@ export default function CourseList({ course }: CourseListProps) {
 
   return (
     <div
-      className="w-full bg-green-600 flex-1 text-black flex items-center pl-8 cursor-pointer hover:bg-green-700 transition ease-in-out"
+      className={`w-full text-lg ${
+        clickedCourse === course.courseCode
+          ? `bg-green-1000 text-white`
+          : `bg-green-600`
+      } text-center flex-1 text-black flex flex-col justify-center items-center cursor-pointer hover:bg-opacity-80 hover:bg-green-1000 hover:text-white transition ease-in-out rounded-lg`}
       onClick={(e) => handleClick(e)}
     >
-      {course.courseCode} <br></br>
-      {course.courseName}
+      <strong>{course.courseCode}</strong>
+      <div>{course.courseName}</div>
     </div>
   );
 }

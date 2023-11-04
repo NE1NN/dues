@@ -2,8 +2,9 @@
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
 import { Course, SearchBarProps } from '../../../types/types';
-import { useContext, useState } from 'react';
+import { useContext, useState, useEffect } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
+import { pushSelectedCourses } from '../../../firebase/helper';
 
 export default function SearchBar({ isLocked }: SearchBarProps) {
   const contextValue = useContext(SelectedCoursesContext);
@@ -15,9 +16,15 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
     );
   }
 
-  const { courses, setSelectedCourses } = contextValue;
-
+  const { courses, setSelectedCourses, userId, selectedCourses } = contextValue;
   const courseList = courses.map((course) => course.courseCode);
+
+  useEffect(() => {
+    const selectedCoursesCode = selectedCourses.map(
+      (course) => course.courseCode
+    );
+    setAutocompleteValue(selectedCoursesCode);
+  }, [selectedCourses]);
 
   return (
     <Autocomplete
@@ -27,7 +34,12 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
       id="combo-box-demo"
       options={courseList}
       value={autocompleteValue}
-      sx={{ width: '40vw' }}
+      sx={{
+        width: '40vw',  // Default width for screens wider than 872px
+        '@media (max-width: 872px)': {
+          width: '100%',  // Full width for screens narrower than 872px
+        },
+      }}
       renderInput={(params) => (
         <TextField {...params} placeholder="Search Course" />
       )}
@@ -60,6 +72,12 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
         );
 
         setSelectedCourses(filteredCourses);
+
+        async function updateSelectedCourses() {
+          await pushSelectedCourses(userId, filteredCourses);
+        }
+
+        updateSelectedCourses();
       }}
     />
   );
