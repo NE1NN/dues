@@ -2,6 +2,7 @@ import { addDoc, collection, getDocs } from 'firebase/firestore';
 import { db } from '../../firebase/service';
 import SearchBar from './components/SearchBar';
 import DueList from './components/DueList';
+import Pdf from './components/Pdf';
 import {
 	Assessment,
 	AssessmentToPush,
@@ -13,13 +14,8 @@ import MainContainer from './components/MainContainer';
 import { assessments, data } from '../../firebase/data';
 import { DateTime } from 'luxon';
 
-import { PdfReader } from './pdfReader';
-
 export async function getCourses() {
-	const parsedData = PdfReader();
 	console.log('===============getCourses===============');
-	console.log(parsedData);
-
 	const coursesCollection = collection(db, 'courses');
 	const courseDocs = await getDocs(coursesCollection);
 
@@ -105,6 +101,7 @@ export default async function Home() {
 
 	return (
 		<main className="bg-white h-screen">
+			<Pdf />
 			<MainContainer
 				courses={courses}
 				assessments={assessments}
