@@ -1,18 +1,18 @@
-'use client';
+"use client";
 
-import { Checkbox } from '@mui/material';
-import { DueListProps } from '../../../types/types';
-import { DateTime } from 'luxon';
-import { useContext } from 'react';
-import SelectedCoursesContext from './SelectedCoursesContext';
-import { updateUserAssessment } from '../../../firebase/helper';
+import { Checkbox } from "@mui/material";
+import { DueListProps } from "../../../types/types";
+import { DateTime } from "luxon";
+import { useContext } from "react";
+import SelectedCoursesContext from "./SelectedCoursesContext";
+import { updateUserAssessment } from "../../../firebase/helper";
 
 export default function DueList({ assessment }: DueListProps) {
   const contextValue = useContext(SelectedCoursesContext);
 
   if (!contextValue) {
     throw new Error(
-      'SelectedCoursesContext must be used within a SelectedCoursesContext.Provider'
+      "SelectedCoursesContext must be used within a SelectedCoursesContext.Provider"
     );
   }
 
@@ -20,7 +20,7 @@ export default function DueList({ assessment }: DueListProps) {
 
   async function handleChange(event: React.ChangeEvent<HTMLInputElement>) {
     event.stopPropagation();
-    const newStatus = event.target.checked ? 'completed' : 'incomplete';
+    const newStatus = event.target.checked ? "completed" : "incomplete";
     setMutableAssesments((prev) =>
       prev.map((ass) =>
         ass.id === assessment.id
@@ -38,18 +38,44 @@ export default function DueList({ assessment }: DueListProps) {
 
   function findDaysDifference(dueDate: string) {
     const dueDateString = DateTime.fromISO(dueDate);
-    const today = DateTime.local().startOf('day');
-    const daysDifference = Math.round(dueDateString.diff(today, 'days').days);
+    const today = DateTime.local().startOf("day");
+    const daysDifference = Math.round(dueDateString.diff(today, "days").days);
 
     return daysDifference;
   }
 
   function setDueString(days: number) {
-    if (days === 0) return 'due today';
-    if (days === 1) return 'due tomorrow';
-    if (days === -1) return 'due yesterday';
+    if (days === 0)
+      return (
+        <span>
+          due <span className="text-red-500">today</span>
+        </span>
+      );
+    if (days === 1)
+      return (
+        <span>
+          due <span className="text-red-500">tomorrow</span>
+        </span>
+      );
+    if (days === -1)
+      return (
+        <span>
+          due <span className="text-red-500">yesterday</span>
+        </span>
+      );
 
-    return days > 0 ? `due in ${days} days` : `due ${Math.abs(days)} days ago`;
+    // For days < 3 and days > 0, apply the text-red-500 class, otherwise text-black
+    const dayTextClass = days > 0 && days <= 3 ? "text-red-500" : "text-black";
+
+    return days > 0 ? (
+      <span>
+        due in <span className={dayTextClass}>{days} days</span>
+      </span>
+    ) : (
+      <span>
+        due <span className="text-black">{Math.abs(days)}</span> days ago
+      </span>
+    );
   }
 
   return (
@@ -59,7 +85,7 @@ export default function DueList({ assessment }: DueListProps) {
     >
       <Checkbox
         onChange={handleChange}
-        checked={assessment.status === 'completed' ? true : false}
+        checked={assessment.status === "completed" ? true : false}
       />
       <div>
         <div className="text-black">
