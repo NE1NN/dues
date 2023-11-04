@@ -1,10 +1,13 @@
 'use client';
+import { useState } from 'react';
+import * as pdfjsLib from 'pdfjs-dist';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { CloudUpload } from '@mui/icons-material';
-import * as pdfjsLib from 'pdfjs-dist';
 
 export default function Pdf() {
+	const [rawData, setRawData] = useState<File>();
+
 	const VisuallyHiddenInput = styled('input')({
 		clip: 'rect(0 0 0 0)',
 		clipPath: 'inset(50%)',
@@ -85,7 +88,7 @@ export default function Pdf() {
 			if (name.trim() !== 'and') {
 				output.push({
 					name: name.trim(),
-					dueDate: dueDate.replace('11:59', '').trim(),
+					dueDate: dueDate.replace('11:59', '').trim().replace('2023', '23'),
 				});
 			}
 		});
@@ -103,7 +106,7 @@ export default function Pdf() {
 		const cleanArr = filter2.join(' ');
 		const splitByPM = cleanArr.split('PM');
 		const assessments = extractAssessmentsInfo(splitByPM);
-		console.log(assessments);
+		return assessments;
 	};
 
 	const extraction1 = (text: string) => {
@@ -146,9 +149,8 @@ export default function Pdf() {
 				for (let i = 0; i < texts.length; i++) {
 					texts[i] = texts[i].replace(/\s+/g, ' ').trim();
 				}
-				console.log(texts[0]);
-				extraction1(texts[0]);
-				return texts;
+				const output = extraction1(texts[0]);
+				return output;
 			});
 		});
 	}
@@ -170,13 +172,18 @@ export default function Pdf() {
 		});
 	}
 
-	const handleFileChange = async (event: any) => {
+	const handleFileChange = (event: any) => {
 		const file: File = event.target.files[0];
+		setRawData(file);
+	};
 
-		if (file) {
+	const handleParseButton = async () => {
+		if (rawData) {
 			const fileReader = new FileReader();
-			const input = await readFileAsArrayBuffer(file);
-			pdfToText(input as unknown as ArrayBuffer);
+			const input = await readFileAsArrayBuffer(rawData);
+			const assessments = await pdfToText(input as unknown as ArrayBuffer);
+		} else {
+			alert('ERROR: cannot parse, no file uploaded');
 		}
 	};
 
@@ -187,6 +194,7 @@ export default function Pdf() {
 				Upload File
 				<VisuallyHiddenInput type="file" onChange={handleFileChange} />
 			</Button>
+			<Button onClick={handleParseButton}>Parse Data</Button>
 		</div>
 	);
 }
