@@ -34,10 +34,12 @@ export const signInAnonymous = async (): Promise<string | null> => {
 
 export const upgradeAnonymousToGoogle = async () => {
   const auth = getAuth();
+  
   if (auth.currentUser && auth.currentUser.isAnonymous) {
     try {
       const anonymousUser = auth.currentUser;
       const provider = new GoogleAuthProvider();
+      provider.addScope('https://www.googleapis.com/auth/calendar');
 
       await linkWithPopup(anonymousUser, provider);
       console.log('Linking successful');
