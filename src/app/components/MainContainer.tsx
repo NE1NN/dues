@@ -4,13 +4,11 @@ import {
 	Assessment,
 	Course,
 	MainContainerProps,
-	SelectedCoursesContextType,
 } from '../../../types/types';
 import CourseListBox from './CourseListBox';
-import DueList from './DueList';
 import SearchBar from './SearchBar';
 import Pdf from './Pdf';
-import { createContext, useContext, useEffect, useState } from 'react';
+import {  useEffect, useState } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import UpcomingAssessments from './UpcomingAssessments';
 import DueAssessments from './DueAssessments';

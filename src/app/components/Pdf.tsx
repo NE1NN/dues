@@ -3,7 +3,6 @@ import { useState } from 'react';
 import * as pdfjsLib from 'pdfjs-dist';
 import { Button } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { CloudUpload } from '@mui/icons-material';
 import { data, assessments } from '../../../firebase/data';
 
 export default function Pdf() {

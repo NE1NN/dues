@@ -1,7 +1,7 @@
 'use client';
 
 import { Autocomplete, Chip, TextField } from '@mui/material';
-import { Course, SearchBarProps } from '../../../types/types';
+import { SearchBarProps } from '../../../types/types';
 import { useContext, useState, useEffect } from 'react';
 import SelectedCoursesContext from './SelectedCoursesContext';
 import { pushSelectedCourses } from '../../../firebase/helper';
@@ -35,9 +35,9 @@ export default function SearchBar({ isLocked }: SearchBarProps) {
       options={courseList}
       value={autocompleteValue}
       sx={{
-        width: '40vw',  // Default width for screens wider than 872px
+        width: '40vw', // Default width for screens wider than 872px
         '@media (max-width: 872px)': {
-          width: '100%',  // Full width for screens narrower than 872px
+          width: '100%', // Full width for screens narrower than 872px
         },
       }}
       renderInput={(params) => (
