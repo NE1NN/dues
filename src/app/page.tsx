@@ -85,9 +85,9 @@ export async function pushAssessments() {
 }
 
 export default async function Home() {
+  // User pushCourses and pushAssessments to push a new data to the database
   // pushCourses();
   // pushAssessments();
-  // signInAnonymous();
   const courses = await getCourses();
   const assessments = await getAssessments();
 

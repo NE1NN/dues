@@ -1,10 +1,8 @@
-import { getDatabase, ref, set } from 'firebase/database';
-import { db } from './service';
-import { addDoc, collection } from 'firebase/firestore';
+import { AssessmentToPush,  CourseToPush } from '../types/types';
 
-export const data: any = [];
+export const data: CourseToPush[] = [];
 
-export const assessments: any = [];
+export const assessments: AssessmentToPush[] = [];
 
 export const returnData = () => {
 	return data;
