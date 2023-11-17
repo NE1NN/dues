@@ -29,10 +29,10 @@ export default function MainContainer({
   const [isLocked, setIsLocked] = useState(true);
   const [userId, setUserId] = useState<string | null>(null);
 
-  function getSelectedAssessments(
+  const getSelectedAssessments = (
     assessments: Assessment[],
     selectedCourses: Course[]
-  ): Assessment[] {
+  ): Assessment[] => {
     // Filters the assessments based on selected courses
     let filteredAssessments = assessments.filter((assessment) =>
       selectedCourses.some(
@@ -47,9 +47,9 @@ export default function MainContainer({
     }
 
     return filteredAssessments;
-  }
+  };
 
-  function getUpcomingAssessments(assessments: Assessment[]): Assessment[] {
+  const getUpcomingAssessments = (assessments: Assessment[]): Assessment[] => {
     const today = new Date();
     // Set the time to midnight to only compare by date
     today.setHours(0, 0, 0, 0);
@@ -63,9 +63,9 @@ export default function MainContainer({
     return filteredAss.sort(
       (a, b) => new Date(a.dueDate).getTime() - new Date(b.dueDate).getTime()
     );
-  }
+  };
 
-  function getDueAssessments(assessments: Assessment[]): Assessment[] {
+  const getDueAssessments = (assessments: Assessment[]): Assessment[] => {
     const today = new Date();
     // Set the time to midnight to only compare by date
     today.setHours(0, 0, 0, 0);
@@ -79,15 +79,15 @@ export default function MainContainer({
     return filteredAss.sort(
       (a, b) => new Date(b.dueDate).getTime() - new Date(a.dueDate).getTime()
     );
-  }
+  };
 
-  function getCompletedAssessments(assessments: Assessment[]): Assessment[] {
+  const getCompletedAssessments = (assessments: Assessment[]): Assessment[] => {
     const filteredAss = assessments.filter(
       (assessment) => assessment.status === 'completed'
     );
 
     return filteredAss;
-  }
+  };
 
   useEffect(() => {
     const auth = getAuth();
