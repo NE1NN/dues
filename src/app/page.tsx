@@ -5,7 +5,7 @@ import MainContainer from './components/MainContainer';
 import { assessments, data } from '../../firebase/data';
 import { DateTime } from 'luxon';
 
-export async function getCourses() {
+async function getCourses() {
   console.log('===============getCourses===============');
   const coursesCollection = collection(db, 'courses');
   const courseDocs = await getDocs(coursesCollection);
@@ -21,7 +21,7 @@ export async function getCourses() {
   return courses;
 }
 
-export async function getAssessments() {
+async function getAssessments() {
   const assCollection = collection(db, 'assessments');
   const assDocs = await getDocs(assCollection);
 
@@ -53,7 +53,7 @@ function convertTimeToISO(data: AssessmentToPush[]) {
   return data;
 }
 
-export async function pushCourses() {
+async function pushCourses() {
   const coursesCol = collection(db, 'courses');
 
   await Promise.all(
@@ -68,7 +68,7 @@ export async function pushCourses() {
   );
 }
 
-export async function pushAssessments() {
+async function pushAssessments() {
   const assCol = collection(db, 'assessments');
   const converted = convertTimeToISO(assessments);
 
